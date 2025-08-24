@@ -102,7 +102,7 @@ namespace ifm3bAPI.Controllers
             return Ok(user);
         }
 
-        //Delete user in Registers
+        //Delete user in Register controller
         [HttpDelete]
         [Route("{id:int}")]
         public IActionResult DeleteRegister(int id) 
