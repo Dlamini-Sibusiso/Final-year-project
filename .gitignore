@@ -26,3 +26,6 @@ pnpm-debug.log*
 # system files
 Thumbs.db
 ehthumbs.db
+
+# Ignore Visual Studio folder
+.vs/
