@@ -1,0 +1,6 @@
+@ifm3bAPI_HostAddress = http://localhost:5289
+
+GET {{ifm3bAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

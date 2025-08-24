@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "plugins": [
+      "expo-router"
+    ],
+    "name": "ifm3bmobile",
+    "slug": "ifm3bmobile"
+  }
+}
