@@ -19,7 +19,7 @@ const Login = () => {
                     <label htmlFor="password">Password:</label>
                     <input type="text" placeholder="Enter password" className="form-control rounded-0 mb-3"/>
                     
-                    <button className="btn btn-success w-100 rounded-0 mb-2" type="submit">Submit</button>
+                    <button className="btn btn-success w-100 rounded-0 mb-2 btnColor" type="submit">Submit</button>
                     <p>Don't have an account?<span className="linkStyle" onClick={() => handleClick('signingup')}> Sign Up</span> Or<br/> <span className="linkStyle" onClick={() => handleClick('forgotpass')}> Forgot password</span></p>
                 </form>
             </div>

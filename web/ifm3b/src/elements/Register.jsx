@@ -53,8 +53,8 @@ const Register = () => {
                     <label htmlFor="Role">Role:</label>
                     <input type="text" className="form-control rounded-0 mb-3" name="role" value={formData.role} readOnly/>
 
-                    <button className="btn btn-success w-100 rounded-0 mb-2" type="submit">Submit</button>
-                    <p>Have an account? <Link to="/"> Sign in</Link></p>
+                    <button className="btn btn-success w-100 rounded-0 mb-2 btnColor" type="submit">Submit</button>
+                    <p>Have an account? <Link to="/" style={{color:'orange'}}> Sign in</Link></p>
                 </form>
             </div>
         </div>

@@ -16,9 +16,11 @@
     background-Repeat: no-repeat;
     background-Size: 100% 120%;
 }
-
+.btnColor{
+    background-color: orange;
+}
 .linkStyle{
-    color: rgb(3, 3, 110);
+    color: orange;
     cursor: pointer;
     font-size: 18px;
     text-decoration: underline;

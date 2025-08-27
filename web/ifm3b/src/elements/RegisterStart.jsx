@@ -41,7 +41,7 @@ const RegisterSart = () => {
                     <label htmlFor="Employee Number">Employee Number:</label>
                     <input type="number" placeholder="Enter employee number" className="form-control rounded-0 mb-3" onChange={handleChange} name="employnum"/>
                     
-                    <button className="btn btn-success w-100 rounded-0 mb-2" type="submit">Submit</button>
+                    <button className="btn btn-success w-100 rounded-0 mb-2 btnColor" type="submit">Submit</button>
                 </form>
             </div>
         </div>

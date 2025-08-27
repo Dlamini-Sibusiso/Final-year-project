@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "ifm3bAPI.Controllers.RegistersController",
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
     "Method": "GetAllRegisters",
-    "RelativePath": "api/Registers",
+    "RelativePath": "api/Register",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -10,25 +10,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ifm3bAPI.Controllers.RegistersController",
-    "Method": "AddRegister",
-    "RelativePath": "api/Registers",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "addRegisterDto",
-        "Type": "ifm3bAPI.Models.AddRegisterDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ifm3bAPI.Controllers.RegistersController",
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
     "Method": "GetRegisterById",
-    "RelativePath": "api/Registers/{id}",
+    "RelativePath": "api/Register/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -42,9 +26,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ifm3bAPI.Controllers.RegistersController",
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
     "Method": "UpdateRegister",
-    "RelativePath": "api/Registers/{id}",
+    "RelativePath": "api/Register/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -63,9 +47,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ifm3bAPI.Controllers.RegistersController",
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
     "Method": "DeleteRegister",
-    "RelativePath": "api/Registers/{id}",
+    "RelativePath": "api/Register/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -73,6 +57,48 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
+    "Method": "Login",
+    "RelativePath": "api/Register/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "ifm3bAPI.Models.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
+    "Method": "Profile",
+    "RelativePath": "api/Register/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
+    "Method": "AddRegister",
+    "RelativePath": "api/Register/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addRegisterDto",
+        "Type": "ifm3bAPI.Models.AddRegisterDto",
         "IsRequired": true
       }
     ],

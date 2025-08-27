@@ -13,20 +13,21 @@ const Home = () => {
                         source={welcome}
                         style={styles.background}
                         resizeMode='cover'
-                    > 
-                        
-                        <View style={styles.container}>   
+                    >                         
+                        <View style={styles.container}>
+
+                            <Text style={styles.label}>Username:</Text>
                             <TextInput style={styles.textInput} placeholder='Enter Username'/>
+                            <Text style={styles.label}>Password:</Text>
                             <TextInput style={styles.textInput} placeholder='Enter Password'/>
                             
-
                             <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonText}>Sign in</Text>
+                                <Text style={styles.buttonlblText}>Sign in</Text>
                             </TouchableOpacity>
 
-                            <Text>Don't have an account ? <Text style={{color: 'blue'}}> Sign Up</Text></Text>
-                        </View>
-                        
+                            <Text style={styles.label}>Don't have an account? <Text style={{color: 'orange', fontWeight:'bold'}}> Sign Up</Text> Or <Text style={{color: 'orange', fontWeight:'bold'}}> Forgot password</Text></Text>
+                            
+                        </View>                      
                     </ImageBackground>
             </ScrollView>
         </SafeAreaView>
@@ -37,35 +38,36 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
-        padding: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
+        padding: 20,
+        margin: 20,
+        borderRadius: 10,
+        backgroundColor: 'rgba(1,32,93,0.6)',
+    },
+    label:{
+        color:'white', 
+        fontSize: 15,
     },
     textInput: {
-        borderWidth: 1,
-        borderColor: '#cccccc',
-        width: '100%',
+        padding: 10,
         backgroundColor:'white',
-        borderRadius: 25,
-        marginBottom: 10,
+        borderRadius: 5,
+        marginVertical: 10,
     },
     background: {
         flex: 1,
-        width: '100%',
-        height: '100%',
+        justifyContent: 'center',
     },
     button: {
-        backgroundColor: 'rgba(1,32,93,0.6)',
-        width: '100%',
-        paddingVertical: 14,
-        bordingRadius: 999,
+        backgroundColor: 'orange',
         alignItems: 'center',
-        marginBottom: 10,
+        marginTop: 10,
+        borderRadius: 10,
+        overflow: 'hidden',
+        paddingVertical: 7,
     },
-    buttonText: {
+    buttonlblText: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
-    }
+    },
 });
