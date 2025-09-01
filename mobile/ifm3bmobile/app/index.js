@@ -1,11 +1,22 @@
-import { ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import styles from '../assets/style/styles';
 import welcome  from '../assets/images/welcome.png';
 
-const Home = () => {
+const Login = () => {
+    const router = useRouter();
+
+    const signingIn = () => {
+        router.push('/(tabs)/Home')
+    };
+
+    const Handlepress = (namechoice) => {
+            const encodedName = encodeURIComponent(namechoice);
+            router.push(`/RegisterStart?name=${encodedName}`);
+    };
+
     return (
         <SafeAreaView>
             <ScrollView contentContainerStyle={{ height:'100%'}}>
@@ -14,19 +25,17 @@ const Home = () => {
                         style={styles.background}
                         resizeMode='cover'
                     >                         
-                        <View style={styles.container}>
-
+                        <View style={styles.introcontainer}>
+                            <Text style={styles.introTitle}>Login</Text>
                             <Text style={styles.label}>Username:</Text>
                             <TextInput style={styles.textInput} placeholder='Enter Username'/>
                             <Text style={styles.label}>Password:</Text>
                             <TextInput style={styles.textInput} placeholder='Enter Password'/>
                             
                             <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonlblText}>Sign in</Text>
+                                <Text style={styles.buttonText} onPress={() => signingIn()}>Sign in</Text>
                             </TouchableOpacity>
-
-                            <Text style={styles.label}>Don't have an account? <Text style={{color: 'orange', fontWeight:'bold'}}> Sign Up</Text> Or <Text style={{color: 'orange', fontWeight:'bold'}}> Forgot password</Text></Text>
-                            
+                            <Text style={styles.label}>Don't have an account? <Text style={styles.labelLink} onPress={() => Handlepress("signingup")}> Sign Up</Text> Or <Text style={styles.labelLink} onPress={() => Handlepress("forgotpass")}> Forgot password</Text></Text>
                         </View>                      
                     </ImageBackground>
             </ScrollView>
@@ -34,40 +43,5 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Login;
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 20,
-        margin: 20,
-        borderRadius: 10,
-        backgroundColor: 'rgba(1,32,93,0.6)',
-    },
-    label:{
-        color:'white', 
-        fontSize: 15,
-    },
-    textInput: {
-        padding: 10,
-        backgroundColor:'white',
-        borderRadius: 5,
-        marginVertical: 10,
-    },
-    background: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    button: {
-        backgroundColor: 'orange',
-        alignItems: 'center',
-        marginTop: 10,
-        borderRadius: 10,
-        overflow: 'hidden',
-        paddingVertical: 7,
-    },
-    buttonlblText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-});
