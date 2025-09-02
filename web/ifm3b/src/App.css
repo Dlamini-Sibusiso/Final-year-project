@@ -16,9 +16,22 @@
     background-Repeat: no-repeat;
     background-Size: 100% 120%;
 }
+
+.errWarn{
+    color: red; 
+    font-weight: bold;
+    background-Color: white;
+}
+.successMsg{
+    color: green; 
+    font-weight: bold;
+    background-Color: white;
+}
+
 .btnColor{
     background-color: orange;
 }
+
 .linkStyle{
     color: orange;
     cursor: pointer;

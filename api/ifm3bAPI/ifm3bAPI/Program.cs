@@ -1,4 +1,6 @@
 using ifm3bAPI.Data;
+using ifm3bAPI.Models;
+using ifm3bAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,12 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
+
+builder.Services.AddScoped<IPasswordHasher<object>, PasswordHasher<object>>();
+//Bind settings from appsettings.json
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+//Register the EmailService
+builder.Services.AddTransient<EmailService>();
 
 //for database interaction with port front and back
 builder.Services.AddCors(options =>

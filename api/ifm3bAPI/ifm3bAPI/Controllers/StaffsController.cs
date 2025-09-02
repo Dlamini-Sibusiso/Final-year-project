@@ -29,13 +29,13 @@ namespace ifm3bAPI.Controllers
 
         //get staff by id from db
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("GetStaffById/{id}")]
         public IActionResult GetStaffById(int id)
         {
-            var staff = dbContext.Staffs.Find(id);
+            var staff = dbContext.Staffs.FirstOrDefault(u => u.Employee_Number == id);
             if (staff is null)
             {
-                return NotFound(new { meassage = "Staff was not found" });//404 result
+                return NotFound(new { message = "Employee number was not found. You are not authorized to use the system. You must ask HR/Manager for assistant." });//404 result
             }
             return Ok(staff);
         }

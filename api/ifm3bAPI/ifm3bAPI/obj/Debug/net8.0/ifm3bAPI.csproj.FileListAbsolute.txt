@@ -127,3 +127,6 @@ C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\M
 C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\MailKit.dll
+C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\MimeKit.dll

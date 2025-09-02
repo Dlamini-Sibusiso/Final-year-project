@@ -2,6 +2,7 @@ import React from "react";
 //import axios from "axios";
 import { Link, useLocation } from "react-router-dom"
 import { useState } from "react";
+import axios from "axios";
 
 const Register = () => {
     const location = useLocation();
@@ -9,54 +10,127 @@ const Register = () => {
     const role = location.state?.role;
 
     const [formData, setFormData] = useState({
-        pass:"",
-        usern:"",
-        depart:"",
-        phonenum:"",
-        email:"",
-        employnum: number || "",
-        role: role || "" 
+        Password:"",
+        Username:"",
+        Department:"",
+        Phone_Number:"",
+        Email:"",
+        Id: number || "",
+        Role: role || "" 
     });
+    const [errors, setErrors] = useState({});
+    const [okmsg, setOkmsg] = useState({});
 
     const handleChange = (e) => {
         setFormData((prev) => ({...prev, [e.target.name]: e.target.value}))
     };
 
-    const handleClick = (e) =>{
+    const handleClick = async (e) => {
         e.preventDefault();
         console.log(formData);
+        setErrors({});
+        setOkmsg({});
+
+        const validErrors = validationForm();//phone number and email validation
+        if(Object.keys(validErrors).length > 0)
+        {
+            setErrors(validErrors);
+            return;
+        }
+
+        try{
+            const res = await axios.post("http://localhost:5289/api/Register/register", formData) 
+            setOkmsg({message: [res.data.message]})
+            alert(res.data.message)
+        }catch(err){
+            console.error(err.message)
+            alert('Failed to register')
+            if (err.response?.status === 400 || err.response?.status === 409)
+            {
+                const errorData = err.response.data;
+
+                if (Array.isArray(errorData.message))
+                {
+                    setErrors({message: errorData.respond.data})
+                }else if (typeof errorData.message === "string"){
+                    setErrors({message: [errorData.message] });
+                }else if (errorData.errors) {
+                    setErrors({modMsg: errorData.errors});//Modelstate errors    
+                }
+
+            } else {
+                setErrors({unexpectedErr: ['Make sure you have correctly filled the form']})
+            }
+        }
     }
+
+    //validating phone number and email if entered correct
+    const validationForm = () => {
+        const validationErrors = {};
+
+        //phone number must be exactly 10 digits
+        if(!/^\d{10}$/.test(formData.Phone_Number))
+        {
+            validationErrors.Phone_Number = ['Phone number must be exactly 10 digits'];
+        }
+        //email validation
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.Email))
+        {
+            validationErrors.Email = ['Invalid email format']
+        }
+
+        return validationErrors;
+    };
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
+            {errors.unexpectedErr && errors.unexpectedErr.map((sms, i) => (
+                <div key={i} className="errWarn">{sms}</div> 
+            ))}
+            {errors.modMsg && errors.modMsg.map((sms, i) => (
+                <div key={i} className="errWarn">{sms}</div> 
+            ))}
+
             <div className="p-3 rounded w-25 border loginForm">
                 <h1 style={{textAlign:'center'}}>Register/ Sign Up</h1>
                 <form onSubmit={handleClick}>
                     <label htmlFor="password">Password:</label>
-                    <input type="text" placeholder="Enter password" className="form-control rounded-0 mb-3" onChange={handleChange} name="pass"/>
+                    <input type="text" placeholder="Enter password" className="form-control rounded-0 mb-3" onChange={handleChange} name="Password" required/>
                     
                     <label htmlFor="username">Username:</label>
-                    <input type="text" placeholder="Enter username" className="form-control rounded-0 mb-3" onChange={handleChange} name="usern"/>
+                    <input type="text" placeholder="Enter username" className="form-control rounded-0 mb-3" onChange={handleChange} name="Username" required/>
                     
                     <label htmlFor="department">Department:</label>
-                    <input type="text" placeholder="Enter department" className="form-control rounded-0 mb-3" onChange={handleChange} name="depart"/>
-                
+                    <input type="text" placeholder="Enter department" className="form-control rounded-0 mb-3" onChange={handleChange} name="Department" required/>
+
                     <label htmlFor="Phone number">Phone Number:</label>
-                    <input type="number" placeholder="Enter phone number" className="form-control rounded-0 mb-3" onChange={handleChange} name="phonenum"/>
-                    
+                    <input type="number" placeholder="Enter phone number" className="form-control rounded-0 mb-3" onChange={handleChange} name="Phone_Number" required/>
+                    {errors.Phone_Number && errors.Phone_Number.map((sms, i) => (
+                        <div key={i} className="errWarn">{sms}</div>
+                    ))}
+
                     <label htmlFor="Email">Email:</label>
-                    <input type="text" placeholder="Enter email" className="form-control rounded-0 mb-3" onChange={handleChange} name="email"/>
-                    
+                    <input type="text" placeholder="Enter email" className="form-control rounded-0 mb-3" onChange={handleChange} name="Email" required/>
+                    {errors.Email && errors.Email.map((sms, i) => (
+                        <div key={i} className="errWarn">{sms}</div>
+                    ))}
+
                     <label htmlFor="Employee Number">Employee Number:</label>
-                    <input type="number" className="form-control rounded-0 mb-3" name="employnum" value={formData.employnum} readOnly/>
+                    <input type="number" className="form-control rounded-0 mb-3" name="Id" value={formData.Id} readOnly required/>
                     
                     <label htmlFor="Role">Role:</label>
-                    <input type="text" className="form-control rounded-0 mb-3" name="role" value={formData.role} readOnly/>
+                    <input type="text" className="form-control rounded-0 mb-3" name="Role" value={formData.Role} readOnly required/>
 
                     <button className="btn btn-success w-100 rounded-0 mb-2 btnColor" type="submit">Submit</button>
                     <p>Have an account? <Link to="/" style={{color:'orange'}}> Sign in</Link></p>
                 </form>
             </div>
+            {errors.message && errors.message.map((sms, i) => (
+                <div key={i} className="errWarn">{sms}</div> 
+            ))}
+            {okmsg.message && okmsg.message.map((sms, i) => (
+                <div key={i} className="successMsg">{sms}</div> 
+            ))}
         </div>
     )
 }

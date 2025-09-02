@@ -64,6 +64,22 @@
   },
   {
     "ContainingType": "ifm3bAPI.Controllers.RegisterController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/Register/forgotpassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "ifm3bAPI.Models.PasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.RegisterController",
     "Method": "Login",
     "RelativePath": "api/Register/login",
     "HttpMethod": "POST",
@@ -132,22 +148,6 @@
   },
   {
     "ContainingType": "ifm3bAPI.Controllers.StaffsController",
-    "Method": "GetStaffById",
-    "RelativePath": "api/Staffs/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ifm3bAPI.Controllers.StaffsController",
     "Method": "UpdateStaff",
     "RelativePath": "api/Staffs/{id}",
     "HttpMethod": "PUT",
@@ -172,6 +172,22 @@
     "Method": "DeleteStaff",
     "RelativePath": "api/Staffs/{id}",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StaffsController",
+    "Method": "GetStaffById",
+    "RelativePath": "api/Staffs/GetStaffById/{id}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [

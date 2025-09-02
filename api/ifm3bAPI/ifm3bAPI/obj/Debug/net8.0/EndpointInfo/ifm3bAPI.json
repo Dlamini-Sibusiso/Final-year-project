@@ -175,6 +175,37 @@
         }
       }
     },
+    "/api/Register/forgotpassword": {
+      "post": {
+        "tags": [
+          "Register"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Staffs": {
       "get": {
         "tags": [
@@ -216,7 +247,7 @@
         }
       }
     },
-    "/api/Staffs/{id}": {
+    "/api/Staffs/GetStaffById/{id}": {
       "get": {
         "tags": [
           "Staffs"
@@ -237,7 +268,9 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Staffs/{id}": {
       "put": {
         "tags": [
           "Staffs"
@@ -415,6 +448,16 @@
           "password": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PasswordRequest": {
+        "type": "object",
+        "properties": {
+          "employeeNumber": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

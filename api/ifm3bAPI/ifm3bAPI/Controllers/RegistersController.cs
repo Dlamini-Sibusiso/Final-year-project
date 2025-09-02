@@ -1,6 +1,7 @@
 ﻿using ifm3bAPI.Data;
 using ifm3bAPI.Models;
 using ifm3bAPI.Models.Entities;
+using ifm3bAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ifm3bAPI.Controllers
@@ -87,7 +89,7 @@ namespace ifm3bAPI.Controllers
 
                     dbContext.Registers.Add(registerEntity);
                     dbContext.SaveChanges();//save the changes made to the database
-                    return Ok(registerEntity);
+                    return Ok(new {message = "Successfully registered. You can sign in now"});//registerEntity);
                 }
                 return Conflict(new { message = "Sign up Unsuccessful! You already registered, sign in or got to forgot password" });
             }
@@ -203,6 +205,66 @@ namespace ifm3bAPI.Controllers
             dbContext.Registers.Remove(user);
             dbContext.SaveChanges();
             return Ok(user);
+        }
+
+        [HttpPost("forgotpassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] PasswordRequest request, [FromServices] EmailService emailService)
+        {
+            try
+            {
+                var empNumber = request.EmployeeNumber;
+                Console.WriteLine($"Looking for user with EmployeeNumber: {empNumber}");
+
+                var user = dbContext.Registers.FirstOrDefault(u => u.Id == empNumber);
+                if (user is null)
+                {
+                    Console.WriteLine("User not found");
+                    return NotFound(new { message = "User not found" });
+                }
+
+                if (string.IsNullOrWhiteSpace(user.Email))
+                {
+                    Console.WriteLine("User email is empty");
+                    return BadRequest(new { message = "User does not have an email" });
+                }
+
+                //Generate random password
+                string newPassword = GeneratePass();
+                Console.WriteLine($"Generated password: {newPassword}");
+
+                //Hash the password 
+                user.Password = _passwordHasher.HashPassword(null!, newPassword);
+                dbContext.SaveChanges();
+
+                //Email send
+                string subject = "Your new password";
+                string body = $"Hello {user.Username}, \n\nYour new password is: {newPassword}\nPlease log in and change it immediately";
+
+                await emailService.SendEmailAsync(user.Email, subject, body);
+
+                return Ok(new { message = "Your new password has been sent to your email. Cancel and login." });
+
+            }catch (Exception ex) { 
+                Console.WriteLine("Internal Error: " + ex.Message);
+                return StatusCode(500, new { message = "Internal server error", detail = ex.Message });
+            }
+        }
+
+        private static string GeneratePass(int length = 10)
+        {
+            const string valid = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$?_-";
+            var result = new char[length];
+            using var randNumG = RandomNumberGenerator.Create();
+            byte[] uintBuffer = new byte[sizeof(uint)];
+
+            for (int i = 0; i < length; i++)
+            {
+                randNumG.GetBytes(uintBuffer);
+                uint num = BitConverter.ToUInt32(uintBuffer, 0);
+                result[i] = valid[(int)(num % (uint)valid.Length)];
+            }
+
+            return new string(result);
         }
     }
 }
