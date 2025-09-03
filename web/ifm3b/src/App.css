@@ -16,22 +16,9 @@
     background-Repeat: no-repeat;
     background-Size: 100% 120%;
 }
-
-.errWarn{
-    color: red; 
-    font-weight: bold;
-    background-Color: white;
-}
-.successMsg{
-    color: green; 
-    font-weight: bold;
-    background-Color: white;
-}
-
 .btnColor{
     background-color: orange;
 }
-
 .linkStyle{
     color: orange;
     cursor: pointer;
@@ -84,4 +71,14 @@ nav a, .nav-link {
 .dropdown-content a:hover {
     background-color: #ddd;
     border-radius: 8px;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    visibility: hidden;
 }

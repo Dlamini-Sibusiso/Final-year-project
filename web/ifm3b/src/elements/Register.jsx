@@ -27,7 +27,6 @@ const Register = () => {
 
     const handleClick = async (e) => {
         e.preventDefault();
-        console.log(formData);
         setErrors({});
         setOkmsg({});
 
@@ -41,10 +40,9 @@ const Register = () => {
         try{
             const res = await axios.post("http://localhost:5289/api/Register/register", formData) 
             setOkmsg({message: [res.data.message]})
-            alert(res.data.message)
         }catch(err){
             console.error(err.message)
-            alert('Failed to register')
+
             if (err.response?.status === 400 || err.response?.status === 409)
             {
                 const errorData = err.response.data;
@@ -85,10 +83,10 @@ const Register = () => {
     return (
         <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
             {errors.unexpectedErr && errors.unexpectedErr.map((sms, i) => (
-                <div key={i} className="errWarn">{sms}</div> 
+                <div key={i} className="alert alert-warning">{sms}</div> 
             ))}
             {errors.modMsg && errors.modMsg.map((sms, i) => (
-                <div key={i} className="errWarn">{sms}</div> 
+                <div key={i} className="alert alert-warning">{sms}</div> 
             ))}
 
             <div className="p-3 rounded w-25 border loginForm">
@@ -106,13 +104,13 @@ const Register = () => {
                     <label htmlFor="Phone number">Phone Number:</label>
                     <input type="number" placeholder="Enter phone number" className="form-control rounded-0 mb-3" onChange={handleChange} name="Phone_Number" required/>
                     {errors.Phone_Number && errors.Phone_Number.map((sms, i) => (
-                        <div key={i} className="errWarn">{sms}</div>
+                        <div key={i} className="alert alert-warning">{sms}</div>
                     ))}
 
                     <label htmlFor="Email">Email:</label>
                     <input type="text" placeholder="Enter email" className="form-control rounded-0 mb-3" onChange={handleChange} name="Email" required/>
                     {errors.Email && errors.Email.map((sms, i) => (
-                        <div key={i} className="errWarn">{sms}</div>
+                        <div key={i} className="alert alert-warning">{sms}</div>
                     ))}
 
                     <label htmlFor="Employee Number">Employee Number:</label>
@@ -126,10 +124,10 @@ const Register = () => {
                 </form>
             </div>
             {errors.message && errors.message.map((sms, i) => (
-                <div key={i} className="errWarn">{sms}</div> 
+                <div key={i} className="alert alert-warning">{sms}</div> 
             ))}
             {okmsg.message && okmsg.message.map((sms, i) => (
-                <div key={i} className="successMsg">{sms}</div> 
+                <div key={i} className="alert alert-success">{sms}</div> 
             ))}
         </div>
     )

@@ -58,42 +58,49 @@ namespace ifm3bAPI.Controllers
         //Adding register (user) to db
         [HttpPost("register")]
         public IActionResult AddRegister([FromBody] AddRegisterDto addRegisterDto)
-        {   
-            //Validating the incoming request body
-            if (!ModelState.IsValid) 
-            { 
-                return BadRequest(ModelState);
-            }
-
-            //find if the username already exist 
-            var user = dbContext.Registers.FirstOrDefault(u => u.Username == addRegisterDto.Username);
-
-            if (user is null)
-            {
-                //find if the user do not already exist on the system
-                var userId = dbContext.Registers.Find(addRegisterDto.Id);
-
-                if (userId is null)
-                {
-                    //Register comes from entities
-                    var registerEntity = new Register()
-                    {
-                        Id = addRegisterDto.Id,
-                        Username = addRegisterDto.Username,
-                        Password = _passwordHasher.HashPassword(null!, addRegisterDto.Password),
-                        Department = addRegisterDto.Department,
-                        Phone_Number = addRegisterDto.Phone_Number,
-                        Email = addRegisterDto.Email,
-                        Role = addRegisterDto.Role
-                    };
-
-                    dbContext.Registers.Add(registerEntity);
-                    dbContext.SaveChanges();//save the changes made to the database
-                    return Ok(new {message = "Successfully registered. You can sign in now"});//registerEntity);
+        {
+            try { 
+                //Validating the incoming request body
+                if (!ModelState.IsValid) 
+                { 
+                    return BadRequest(ModelState);
                 }
-                return Conflict(new { message = "Sign up Unsuccessful! You already registered, sign in or got to forgot password" });
+
+                //find if the username already exist 
+                var user = dbContext.Registers.FirstOrDefault(u => u.Username == addRegisterDto.Username);
+
+                if (user is null)
+                {
+                    //find if the user do not already exist on the system
+                    var userId = dbContext.Registers.Find(addRegisterDto.Id);
+
+                    if (userId is null)
+                    {
+                        //Register comes from entities
+                        var registerEntity = new Register()
+                        {
+                            Id = addRegisterDto.Id,
+                            Username = addRegisterDto.Username,
+                            Password = _passwordHasher.HashPassword(null!, addRegisterDto.Password),
+                            Department = addRegisterDto.Department,
+                            Phone_Number = addRegisterDto.Phone_Number,
+                            Email = addRegisterDto.Email,
+                            Role = addRegisterDto.Role
+                        };
+
+                        dbContext.Registers.Add(registerEntity);
+                        dbContext.SaveChanges();//save the changes made to the database
+                        return Ok(new {message = "Successfully registered. You can sign in now"});//registerEntity);
+                    }
+                    return Conflict(new { message = "Sign up Unsuccessful! You already registered, sign in or got to forgot password" });
+                }
+                return Conflict(new {message = "Username already exist"});
             }
-            return Conflict(new {message = "Username already exist"});
+            catch (Exception ex)
+            {
+                Console.WriteLine("Internal Error: " + ex.Message);
+                return StatusCode(500, new { message = "Internal server error", detail = ex.Message });
+            }
         }
 
         [HttpPost("login")]
@@ -110,7 +117,7 @@ namespace ifm3bAPI.Controllers
 
                 if (user is null)
                 {
-                    return Unauthorized("Invalid username or password.");
+                    return Unauthorized(new { message = "Invalid username or password." });
                 }
 
                 //verifying hashed password entered by user
@@ -121,7 +128,7 @@ namespace ifm3bAPI.Controllers
                     var token = CreateJwtToken(user);
                     return Ok(new { token });
                 }
-                return Unauthorized("Invalid username or password.");
+                return Unauthorized(new{ message = "Invalid username or password."});
             }
             catch (Exception ex) 
             { 
@@ -157,7 +164,7 @@ namespace ifm3bAPI.Controllers
         public IActionResult Profile()
         {
             var username = User.Identity?.Name;
-            return Ok(new {message = $"Welcome {username}!"});
+            return Ok(new {message = $"Welcome {username}" });
         }
         
         //Update or Edit using employee_number

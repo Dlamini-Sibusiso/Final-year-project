@@ -64,13 +64,14 @@ const RegisterSart = () => {
                 console.error(err.message)
 
                 if (err.response)
-                {
+                {      
                     if (err.response.status === 404)
-                    {
+                    {   
                         const errorData = err.response.data;
                         setError({message: [errorData.message] });
                     }else{
-                        setError({unexpectedErr: ['Make sure your employee number is correct'] });
+                        const errorData = err.response?.data?.message || 'An error occurred';
+                        setError({message: [errorData] });
                     }
                 }else {
                     setError({errnet: ["Network error or server did not respond"]})
@@ -95,19 +96,15 @@ const RegisterSart = () => {
                     <button className="btn btn-success w-100 rounded-0 mb-2 btnColor" type="submit">Submit</button>
                     
                     {errormsg.message && errormsg.message.map((sms, i) => (
-                        <div key={i} className="errWarn">{sms}</div> 
-                    ))}
-
-                    {errormsg.unexpectedErr && errormsg.unexpectedErr.map((sms, i) => (
-                        <div key={i} className="errWarn">{sms}</div> 
+                        <div key={i} className="alert alert-warning">{sms}</div> 
                     ))}
 
                     {errormsg.errnet && errormsg.errnet.map((sms, i) => (
-                        <div key={i} className="errWarn">{sms}</div> 
+                        <div key={i} className="alert alert-warning">{sms}</div> 
                     ))}
                     
                     {passMsg.message && passMsg.message.map((sms, i) => (
-                        <div key={i} className="successMsg">{sms}</div> 
+                        <div key={i} className="alert alert-success">{sms}</div> 
                     ))}
                 </form>
                 <Link to="/">
