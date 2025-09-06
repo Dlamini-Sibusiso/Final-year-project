@@ -37,7 +37,6 @@ const RegisterSart = () => {
         if (name === "forgotpass")
         {   
             try{
-            alert("forgot password, must send new password on email if user was found with the given employee number")
             const res = await axios.post("http://localhost:5289/api/Register/forgotpassword",
                 { employeeNumber: parseInt(formData.Employee_Number)},
                 {
@@ -79,7 +78,6 @@ const RegisterSart = () => {
             }
         }    
     }
-    
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100 loginPage">

@@ -10,6 +10,7 @@ import ProfileUpdate from "./elements/ProfileUpdate";
 import HR from "./elements/HR";
 import StockAmenities from "./elements/StockAmenities";
 import Rooms from "./elements/Rooms";
+import AddRoom from "./elements/AddRoom";
 import History from "./elements/History";
 import EmpHistory from "./elements/EmpHistory";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -30,7 +31,7 @@ const Appcontent = () => {
 
   //Don't show Nav on Login, Register and RegisterStart
 const hideNavRoutes = ['/','/register','/registerstart'];
-const showNav = !hideNavRoutes.includes(location.pathname);
+const showNav = !hideNavRoutes.includes(location.pathname);            
 
   return (
     <div >
@@ -41,10 +42,12 @@ const showNav = !hideNavRoutes.includes(location.pathname);
           <Route path="/register" element = {<Register/>}/>
           <Route path="/home" exact element = {<Home/>}/>
 
+          <Route path="/rooms" exact element = {<Rooms/>}/>
+          <Route path="/addroom" exact element = {<AddRoom/>}/>
+
           <Route path="/report" exact element = {<Report/>}/>
           <Route path="/hr" exact element = {<HR/>}/>
           <Route path="/stockamenities" exact element = {<StockAmenities/>}/>
-          <Route path="/rooms" exact element = {<Rooms/>}/>
           <Route path="/profile" exact element = {<Profile/>}/>
           <Route path="/profileupdate" exact element = {<ProfileUpdate/>}/>
           <Route path="/history" exact element = {<History/>}/>

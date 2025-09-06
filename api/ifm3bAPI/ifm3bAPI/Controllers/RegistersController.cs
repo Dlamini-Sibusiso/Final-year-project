@@ -92,7 +92,7 @@ namespace ifm3bAPI.Controllers
                         dbContext.SaveChanges();//save the changes made to the database
                         return Ok(new {message = "Successfully registered. You can sign in now"});//registerEntity);
                     }
-                    return Conflict(new { message = "Sign up Unsuccessful! You already registered, sign in or got to forgot password" });
+                    return Conflict(new { message = "Sign up Unsuccessful! You already registered, sign in or go to forgot password" });
                 }
                 return Conflict(new {message = "Username already exist"});
             }

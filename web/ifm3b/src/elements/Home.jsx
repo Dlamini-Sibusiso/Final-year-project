@@ -40,7 +40,7 @@ const Home = () => {
             )}
 
             {errorMsg && (
-                <h1 style={{color:"white"}}>{errorMsg}</h1>
+                <h1 className="alert alert-warning">{errorMsg}</h1>
             )}
         </div>
     )

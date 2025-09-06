@@ -69,7 +69,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseStaticFiles();//Enables access to wwwroot
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors();

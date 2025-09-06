@@ -44,6 +44,15 @@ nav a, .nav-link {
     position: relative;
 }
 
+.top-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 .dropdown {
     position: relative;
 }
