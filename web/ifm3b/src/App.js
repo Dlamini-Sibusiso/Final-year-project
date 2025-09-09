@@ -44,6 +44,7 @@ const showNav = !hideNavRoutes.includes(location.pathname);
 
           <Route path="/rooms" exact element = {<Rooms/>}/>
           <Route path="/addroom" exact element = {<AddRoom/>}/>
+          <Route path="/bookroom" exact element = {<BookRoom/>}/>
 
           <Route path="/report" exact element = {<Report/>}/>
           <Route path="/hr" exact element = {<HR/>}/>
@@ -53,7 +54,6 @@ const showNav = !hideNavRoutes.includes(location.pathname);
           <Route path="/history" exact element = {<History/>}/>
           <Route path="/emphistory" exact element = {<EmpHistory/>}/>
           <Route path="/statusupdate" exact element = {<StatusUpdate/>}/>
-          <Route path="/bookroom" exact element = {<BookRoom/>}/>
         </Routes>
     </div>
   );

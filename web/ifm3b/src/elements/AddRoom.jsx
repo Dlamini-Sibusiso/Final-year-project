@@ -1,21 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddRoom = () => {
     const { isLoggedIn } = useAuth();
+    const navigate = useNavigate();
 
+    const [errMsg, setErrMsg] = useState(null);
     const [roomInfo, setRoomInfo] = useState({
         roomId: '',
         description: '',
         capacity: '',
-        amenities: '',
+        amenities: [],
         status: '',
         reason: '',
     });
 
+    const [amenList, setAmenList] = useState([]);
+
     const [imageData, setImageData] = useState(null);
 
+    useEffect (() => {
+        axios.get('http://localhost:5289/api/Amenities')
+            .then(res => { 
+                console.log("Fetched amenities:", res.data);
+                setAmenList(res.data);
+            })
+            .catch(err => {
+                console.error("Error fetching amenities:", err);
+            });
+    },[]);
+
+    //adding amenity if not already selected
+    const handleAmenSelect = (e) => {
+        const selected = e.target.value;
+        if (selected && (!roomInfo.amenities || !roomInfo.amenities.includes(selected)))
+        {
+            setRoomInfo(prev => ({ ...prev,
+                amenities: [...(prev.amenities || []), selected] }));
+        }
+        //reset dropdown after selection
+        e.target.value='';
+    };
+
+    //remove amenity
+    const handleAmenRemove = (amenityRemove) => {
+        setRoomInfo((prev) => { 
+            const currentAmenities = Array.isArray(prev.amenities) ? prev.amenities : [];
+
+            return {
+                ...prev,
+                amenities: currentAmenities.filter(a => a !== amenityRemove)
+            };
+        });
+    };
+
+    //handle othere inputs
     const handleChange = (e) => {
         setRoomInfo((prev) => ({...prev, [e.target.name]: e.target.value}));
     };
@@ -24,8 +65,14 @@ const AddRoom = () => {
         setImageData(e.target.files[0]);
     };
 
+    const handleBack = (e) => {
+        e.preventDefault();
+        navigate('/rooms');
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrMsg(null);
 
         const formData = new FormData();
 
@@ -59,7 +106,7 @@ const AddRoom = () => {
                 roomId: '',
                 description: '',
                 capacity: '',
-                amenities: '',
+                amenities: [],
                 status: '',
                 reason: '',
             });
@@ -67,36 +114,103 @@ const AddRoom = () => {
             
         } catch (err) {
             console.error('Error adding room', err);
-            alert('Failed to add room');
-        }
 
+            if (err.response)
+            {
+                const errStatus = err.response.status; 
+                let message = '';
+
+                switch (errStatus) {
+
+                    case 400:
+                        message = 'Bad request: Room name already exist, change name'
+                        break;
+
+                    case 409:
+                        message = 'Room name already exist, change name'
+                        break;
+
+                    case 500:
+                        message = 'Internal server problem: Please try again later.'
+                        break;
+
+                    default:
+                        message = `Unexpected error: ${errStatus}`;
+                }
+
+                setErrMsg(message);
+            } else {
+
+                setErrMsg('Network error or server not reachable.');
+            }
+        }
     };
 
     return (
-        <div className='container mt-4'>
+        <div>
+            
             {!isLoggedIn && (
                 <h1 className="alert alert-warning">"You are not logged in."</h1>
             )}
 
             {isLoggedIn && (
+                <div className='container mt-4'>
+                    <button className="mb-4 top-button loginForm" onClick={handleBack}>Back</button>
                 <div className="p-4 border rounded shadow-sm" style={{ maxWidth: '500px', margin: '0 auto'}}>
                 <form onSubmit={handleSubmit} encType="multipart/form-data" style={{ maxWidth: 500, margin: 'auto' }}>
                     <h1 className="d-flex justify-content-center align-items-center">Add Room</h1>
+                        {errMsg && (
+                            <div className="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                                {errMsg}
+                            </div>
+                        )}
+
                         <label>Room Name:</label>
                         <input type="text" name="roomId" placeholder="Enter room name" className="form-control rounded-0 mb-2" value={roomInfo.roomId} onChange={handleChange} required />
-                    
+
                         <label>Description:</label>
-                        <textarea name="description" placeholder="Enter description" className="form-control rounded-0 mb-2" value={roomInfo.description} onChange={handleChange}></textarea>
+                        <textarea name="description" placeholder="Enter description" className="form-control rounded-0 mb-2" value={roomInfo.description} onChange={handleChange} required></textarea>
                     
                         <label>Capacity:</label>
                         <input type="number" name="capacity" placeholder="Enter capacity" className="form-control rounded-0 mb-2" value={roomInfo.capacity} onChange={handleChange} required />
                     
                         <label>Amenities:</label>
-                        <input type="text" name="amenities" placeholder="Enter amenities" className="form-control rounded-0 mb-2" value={roomInfo.amenities} onChange={handleChange} required />
-                    
+                        {/*Amenity Dropdown*/}
+                        <select className="form-control rounded-0 mb-2" onChange={handleAmenSelect}>
+                            <option value="">Select amenity</option>                                                
+                            {amenList.map((amenId, i) => (
+                                <option key={i} value={amenId}>
+                                    {amenId}
+                                </option>
+                            ))}
+                        </select>                     
+                        
+                        {/*Selected amenities remove*/}
+                        <div className="mb-2">
+                            {roomInfo.amenities.map((a, i) => (
+                                <span 
+                                    className="badge bg-primary text-white me-1" 
+                                    style={{ cursor: 'pointer' }}
+                                    key={i}
+                                    onClick={() => handleAmenRemove(a)}
+                                    title="Click to remove"
+                                    >
+                                        {a} x
+                                    </span>
+                            ))}
+                        </div>
+
+                        {/*Separate amenities with commas*/}
+                        <label>Selected Amenities</label>
+                        <input type="text" className="form-control rounded-0 mb-2" value={roomInfo.amenities.join(', ')} required/>
+
                         <label>Status:</label>
-                        <input type="text" name="status" placeholder="Enter Status" className="form-control rounded-0 mb-2" value={roomInfo.status} onChange={handleChange} required />
-                    
+                        <select name="status" className="form-control rounded-0 mb-2" value={roomInfo.status} onChange={handleChange} required>
+                            <option value="">Select Status</option>
+                            <option value="Available">Available</option>
+                            <option value="Unavailable">Unavailable</option>
+                        </select>
+                        
                         <label>Reason:</label>
                         <input type="text" name="reason" placeholder="Enter reason" className="form-control rounded-0 mb-2" value={roomInfo.reason} onChange={handleChange}/>
                     
@@ -105,6 +219,7 @@ const AddRoom = () => {
 
                     <button type="submit" className="bt btn-primary w-100 rounded btnColor">submit</button>
                 </form>
+                </div>
                 </div>
             )}
             

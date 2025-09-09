@@ -5,6 +5,8 @@ const Home = () => {
     const [name, setName] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
 
+    
+
     useEffect(() => {
         const fetchName = async () => {
             const token = localStorage.getItem("token");
@@ -27,7 +29,8 @@ const Home = () => {
                 setName(result.data.message);
             } catch (err) {
                 console.error("Failed to fetch profile:", err);
-                setErrorMsg("Error fetching profile.");
+                setErrorMsg("Kindly logout and login again.");
+                alert("Could not get your profile, your sesion ended. Kindly login again.")
             }
         };
         fetchName();
@@ -40,7 +43,7 @@ const Home = () => {
             )}
 
             {errorMsg && (
-                <h1 className="alert alert-warning">{errorMsg}</h1>
+                <h1 className="alert alert-warning">{errorMsg}</h1>   
             )}
         </div>
     )
