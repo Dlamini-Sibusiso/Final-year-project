@@ -281,7 +281,7 @@ const BookRoom = () => {
                                 {bookTemps.map((bkTemp, i) => (
                                     <li key={i} className="list-group-item d-flex justify-content-between align-items-center">
                                         Room: {bkTemp.roomId}, From: {bkTemp.sesion_Start}, To: {bkTemp.sesion_End}
-                                        <button className="btn btn-sm btn-primary" onClick={() => handleDeleteBooking(bkTemp.id)}>Delete Booking</button>
+                                        <button className="btn btn-sm btn-primary " onClick={() => handleDeleteBooking(bkTemp.id)}>Delete Booking</button>
                                     </li>
                                 ))}
                             </ul>
