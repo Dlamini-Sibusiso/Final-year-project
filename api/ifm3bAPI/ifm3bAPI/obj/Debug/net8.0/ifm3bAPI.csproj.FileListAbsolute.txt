@@ -130,3 +130,4 @@ C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\B
 C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\MailKit.dll
 C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\MimeKit.dll
 C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\bin\Debug\net8.0\ifm3bAPI.staticwebassets.runtime.json
+C:\Users\UI\projects\Final-year-project\api\ifm3bAPI\ifm3bAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

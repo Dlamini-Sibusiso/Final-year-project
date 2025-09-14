@@ -29,24 +29,27 @@ const Rooms = () => {
     }
 
     const handleView = (roomId) => {
-        alert(`View room: ${roomId}`);
+        navigate(`/room/${roomId}`);
     };
 
     const handleEdit = (roomId) => {
-        alert(`Edit room: ${roomId}`);
+         navigate(`/editroom/${roomId}`);
     };
 
     const handleDelete = async (roomId) => {
-        if (!Window.confirm(`Are you sure you want to delete room ${roomId}?`)) 
-        {
-            return;
-        }
+        console.log(typeof roomId, roomId);
 
         try {
+            const res = await axios.delete(`http://localhost:5289/api/Rooms/${roomId}`)
+                console.log('successfully deleted:', res.data?.message);
+               // alert(res.data?.message || 'Room deleted successfully.');
 
+                setRooms(prev => prev.filter(room => String(room.roomId) !== String(roomId)));                
         } catch (err) {
             console.error('Delete failed:', err);
-            alert('Failed to delete room.');
+            
+            const errMessage = err.response?.message || 'Failed to delete room.';
+            alert(errMessage);
         }
     };
 

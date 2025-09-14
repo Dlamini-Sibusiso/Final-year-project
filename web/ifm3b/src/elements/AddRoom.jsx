@@ -8,6 +8,7 @@ const AddRoom = () => {
     const navigate = useNavigate();
 
     const [errMsg, setErrMsg] = useState(null);
+    const [capErr, setCapErr] = useState(null);
     const [roomInfo, setRoomInfo] = useState({
         roomId: '',
         description: '',
@@ -65,14 +66,20 @@ const AddRoom = () => {
         setImageData(e.target.files[0]);
     };
 
-    const handleBack = (e) => {
-        e.preventDefault();
+    const handleBack = () => {
         navigate('/rooms');
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrMsg(null);
+        setCapErr(null);
+
+        console.log("capacity", roomInfo.capacity)
+        if (roomInfo.capacity <= 0){
+            setCapErr({message: ['Capacity must be a positive number.'] });
+            return;
+        }
 
         const formData = new FormData();
 
@@ -123,15 +130,15 @@ const AddRoom = () => {
                 switch (errStatus) {
 
                     case 400:
-                        message = 'Bad request: Room name already exist, change name'
+                        message = 'Bad request: Room name already exist, change room name'
                         break;
 
                     case 409:
-                        message = 'Room name already exist, change name'
+                        message = 'Room name already exist, change room name'
                         break;
 
                     case 500:
-                        message = 'Internal server problem: Please try again later.'
+                        message = 'Internal server problem: Please try again later and change room name.'
                         break;
 
                     default:
@@ -164,6 +171,12 @@ const AddRoom = () => {
                                 {errMsg}
                             </div>
                         )}
+
+                        {capErr && capErr.message?.map ((msg, i) => (
+                            <div key={i} className="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                                {msg}
+                            </div>
+                        ))}
 
                         <label>Room Name:</label>
                         <input type="text" name="roomId" placeholder="Enter room name" className="form-control rounded-0 mb-2" value={roomInfo.roomId} onChange={handleChange} required />

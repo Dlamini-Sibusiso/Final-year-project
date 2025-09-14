@@ -161,7 +161,7 @@ const BookRoom = () => {
 
         axios.post('http://localhost:5289/api/Bookings/AddTemp', roomSpec)
         .then(res => {
-            alert("Booking added to temporary list.");
+           // alert("Booking added to temporary list.");
             console.log("Booking Id received: ", bookingId);
             if (!bookingId)
             {

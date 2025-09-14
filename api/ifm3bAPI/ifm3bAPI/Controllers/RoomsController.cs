@@ -58,11 +58,74 @@ namespace ifm3bAPI.Controllers
             return Ok(new { message = "Room successfully added" });
         }
 
+        //api/Rooms
         [HttpGet]
         public async Task<IActionResult> GetAllRooms()
         {
             var rooms = await dbContext.Rooms.ToListAsync();
             return Ok(rooms);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult GetRoomById(string id)
+        {
+            var room = dbContext.Rooms.Find(id);
+            if (room is null)
+            {
+                return NotFound(new { message = "No room was found" });//404 result
+            }
+            return Ok(room);
+        }
+
+        //Update or Edit room
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> EditRoom(string id,[FromForm] UploadRoomDto uploadRoomDto)
+        {
+            //Validating the incoming request body
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //finding room
+            var room = await dbContext.Rooms.FindAsync(id);
+
+            if (room is null)
+            {
+                return NotFound(new { meassage = "The room was not found" });
+            }
+
+            room.Description = uploadRoomDto.Description;
+            room.Capacity = uploadRoomDto.Capacity;
+            room.Amenities = uploadRoomDto.Amenities;
+            room.Status = uploadRoomDto.Status;
+            room.Reason = string.IsNullOrWhiteSpace(uploadRoomDto.Reason) ? null : uploadRoomDto.Reason;
+
+            //Handle image upload
+            if (uploadRoomDto.Image != null)
+            {
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(uploadRoomDto.Image.FileName)}";
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+                if(!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await uploadRoomDto.Image.CopyToAsync(stream);
+                }
+
+                room.ImageUrl = $"/uploads/{fileName}";
+            }
+
+            await dbContext.SaveChangesAsync();//save the changes made to the database
+            return Ok(room);
         }
 
         [HttpDelete("{id}")]

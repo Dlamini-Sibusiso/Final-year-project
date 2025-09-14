@@ -17,7 +17,7 @@ const Login = () => {
     });
     const [loading, setLoading] = useState(false);
 
-    const hangleChange = (name, value) => {
+    const handleChange = (name, value) => {
         setData(prev => ({...prev, [name]: value,}));
     };
 
@@ -71,9 +71,9 @@ const Login = () => {
                         <View style={styles.introcontainer}>
                             <Text style={styles.introTitle}>Login</Text>
                             <Text style={styles.label}>Username:</Text>
-                            <TextInput style={styles.textInput} placeholder='Enter Username' value={logginData.Username} onChangeText={value => hangleChange('Username', value)} autoCapitalize="none"/>
+                            <TextInput style={styles.textInput} placeholder='Enter Username' value={logginData.Username} onChangeText={value => handleChange('Username', value)} autoCapitalize="none"/>
                             <Text style={styles.label}>Password:</Text>
-                            <TextInput style={styles.textInput} placeholder='Enter Password' value={logginData.Password} onChangeText={value => hangleChange('Password', value)} secureTextEntry/>
+                            <TextInput style={styles.textInput} placeholder='Enter Password' value={logginData.Password} onChangeText={value => handleChange('Password', value)} secureTextEntry/>
                             
                             <TouchableOpacity style={styles.button} onPress={signingIn}>
                                 <Text style={styles.buttonText}>
@@ -89,4 +89,3 @@ const Login = () => {
 }
 
 export default Login;
-
