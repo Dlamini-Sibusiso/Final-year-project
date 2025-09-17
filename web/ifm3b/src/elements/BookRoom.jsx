@@ -2,6 +2,8 @@ import React, { useState, useEffect} from "react";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 
+const DEFAULT_IMAGE = '/default-room.png';
+
 const BookRoom = () => {
     const { isLoggedIn, userId } = useAuth();
 
@@ -177,7 +179,6 @@ const BookRoom = () => {
                 console.table(err.response.data.errors);
             }
             
-            alert("Booking failed:" + (err.response?.data?.title || "Internal server error")); 
             const errorData = err.response.data;
             setErrorsBook({message: [errorData.message] });
         });
@@ -256,24 +257,7 @@ const BookRoom = () => {
                         </div>
                         <button className="btn btn-success mt-3" onClick={handleSearch}>Search</button>
                     </div>
-
-                    {availRooms.length > 0 && (
-                        <div className="card p-3 mb-4">
-                            <h5>Available Rooms</h5>
-                            {errorsBook.message && errorsBook.message.map((sms, i) => (
-                                <div key={i} className="alert alert-warning">{sms}</div> 
-                            ))}
-                            <ul className="list-group">
-                                {availRooms.map((rm, i) => (
-                                    <li key={i} className="list-group-item d-flex justify-content-between align-items-center">
-                                        {rm.name || rm.roomId} (Capacity: {rm.capacity})
-                                        <button className="btn btn-sm btn-primary" onClick={() => handleAddBooking(rm)}>Add Booking</button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
+                    
                     {bookTemps.length > 0 && (
                         <div className="card p-3 mb-4">
                             <h5>Temporary Bookings</h5>
@@ -287,6 +271,37 @@ const BookRoom = () => {
                             </ul>
                             <button className="btn btn-success mt-3" onClick={handleBookConfirm}>Confirm All Bookings</button>
                         </div>        
+                    )}
+
+                    {availRooms.length > 0 && (
+                        <div className="card p-3 mb-4">
+                            <h5>Available Rooms</h5>
+                            {errorsBook.message && errorsBook.message.map((sms, i) => (
+                                <div key={i} className="alert alert-warning">{sms}</div> 
+                            ))}
+
+                            <div className="row">
+                                {availRooms.map((rm, i) => (
+                                    <div key={i} className="col-md-4 mb-4">
+                                        <div className="card h-100 shadow-sm">
+                                        
+                                        <img
+                                            src={rm.imageUrl ? `http://localhost:5289${rm.imageUrl}` : DEFAULT_IMAGE}
+                                            className="card-img-top"
+                                            alt="rm.roomId"
+                                            style={{ height: '200px', objectFit: 'cover'}}
+                                        />
+
+                                        <div className="card-body text-center">
+                                            {rm.name || rm.roomId} (Capacity: {rm.capacity})
+                                            <button className="btn btn-sm btn-primary" onClick={() => handleAddBooking(rm)}>Add Booking</button>
+                                        </div>
+
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     )}
                 </div>
             )}
