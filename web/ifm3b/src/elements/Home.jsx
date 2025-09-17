@@ -4,9 +4,7 @@ import axios from "axios";
 const Home = () => {
     const [name, setName] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
-
     
-
     useEffect(() => {
         const fetchName = async () => {
             const token = localStorage.getItem("token");

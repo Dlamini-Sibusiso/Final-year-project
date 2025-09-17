@@ -20,6 +20,38 @@
     ]
   },
   {
+    "ContainingType": "ifm3bAPI.Controllers.AmenitiesController",
+    "Method": "AddAmenity",
+    "RelativePath": "api/Amenities",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amenitydto",
+        "Type": "ifm3bAPI.Models.AmenityDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.AmenitiesController",
+    "Method": "DeleteAmenity",
+    "RelativePath": "api/Amenities/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ifm3bAPI.Controllers.BookingsController",
     "Method": "AddBookingTemp",
     "RelativePath": "api/Bookings/AddTemp",
@@ -449,6 +481,85 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "GetStocks",
+    "RelativePath": "api/Stocks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "AddStock",
+    "RelativePath": "api/Stocks",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "stockDto",
+        "Type": "ifm3bAPI.Models.StockDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "GetStockById",
+    "RelativePath": "api/Stocks/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "UpdateStock",
+    "RelativePath": "api/Stocks/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "stockDto",
+        "Type": "ifm3bAPI.Models.StockDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "DeleteStock",
+    "RelativePath": "api/Stocks/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],

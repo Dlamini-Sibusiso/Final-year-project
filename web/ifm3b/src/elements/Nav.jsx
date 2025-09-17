@@ -38,7 +38,7 @@ const Nav = () => {
                                                         <Link to="report">Report</Link>
                                                         <Link to="rooms">Rooms</Link>
                                                         <Link to="hr">HR files</Link>
-                                                        <Link to="stockamenities">Other</Link>
+                                                        <Link to="stockamenities">Stock & Amenities</Link>
                                                     </div>)}
                                                 </div>)}
                 

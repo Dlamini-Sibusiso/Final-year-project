@@ -8,3 +8,5 @@ wwwroot\uploads\daaa95ed-1e2e-4899-84c2-e2c9f1226da1.png
 wwwroot\uploads\f6341c86-5ec9-4cad-91e9-91394028c386.png
 wwwroot\uploads\fb3798f8-355c-4c54-967b-bc1e14722a43.png
 wwwroot\uploads\140dd802-b6f7-4900-9606-f302f8474f63.png
+wwwroot\uploads\68f2df3e-728c-4793-b124-325edfdbbcc7.png
+wwwroot\uploads\6f903b67-08a4-4590-80db-0146d3ac4da8.png

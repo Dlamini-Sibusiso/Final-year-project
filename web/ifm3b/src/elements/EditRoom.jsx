@@ -1,10 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios'; 
+import useAuth from "../hooks/useAuth";
 
 const DEFAULT_IMAGE = '/default-room.png';
 
 const EditRoom = () => {
+    const { isLoggedIn } = useAuth();//check if user is logged in or not
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -123,72 +125,82 @@ const EditRoom = () => {
     }
 
   return (
-    <div className="container mt-4">
-        <button className="mb-4 top-button loginForm" onClick={handleBack}>Back</button>
-       
-       <div className="card p-3 mb-4">
-            {capErr && capErr.message?.map ((msg, i) => (
-                <div key={i} className="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-                    {msg}
-                </div>
-            ))}
+    <div>
+        {!isLoggedIn && (
+            <h1 className="alert alert-warning">"You are not logged in."</h1>
+        )}
 
-            <div className="row">
-                <div className="col-md-4">
-                    
-                    <img
-                        src={room.imageUrl ? `http://localhost:5289${room.imageUrl}` : DEFAULT_IMAGE}
-                        className="card-img-top mb-2"
-                        alt="room.roomId"
-                        style={{ height: '200px', objectFit: 'cover'}}
-                    />
-                    
-                    <input type="file" onChange={handleImagechange} className="form-control mb-2" />
-                    
-                    <label><strong>Room Name:</strong></label>
-                    <input className="form-control rounded-0 mb-3" value={room.roomId} readOnly/>
-                </div>
+        {isLoggedIn && (
+            <div className="container mt-4">
+                <button className="mb-4 top-button loginForm" onClick={handleBack}>Back to Rooms</button>
+            
+            <div className="card p-3 mb-4">
+                    <h2 className="d-flex justify-content-center align-items-center mb-4">Edit Room</h2>
+
+                    {capErr && capErr.message?.map ((msg, i) => (
+                        <div key={i} className="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                            {msg}
+                        </div>
+                    ))}
+
+                    <div className="row">
+                        <div className="col-md-4">
                             
-                <div className="col-md-3">
-                    <label><strong>Description:</strong></label>
-                    <textarea type="text" name="description" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.description} required />
-                    
-                    <label><strong>Capacity:</strong></label>
-                    <input type="number" name="capacity" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.capacity} required />
+                            <img
+                                src={room.imageUrl ? `http://localhost:5289${room.imageUrl}` : DEFAULT_IMAGE}
+                                className="card-img-top mb-2"
+                                alt="room.roomId"
+                                style={{ height: '200px', objectFit: 'cover'}}
+                            />
+                            
+                            <input type="file" onChange={handleImagechange} className="form-control mb-2" />
+                            
+                            <label><strong>Room Name:</strong></label>
+                            <input className="form-control rounded-0 mb-3" value={room.roomId} readOnly/>
+                        </div>
+                                    
+                        <div className="col-md-3">
+                            <label><strong>Description:</strong></label>
+                            <textarea type="text" name="description" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.description} required />
+                            
+                            <label><strong>Capacity:</strong></label>
+                            <input type="number" name="capacity" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.capacity} required />
+                        </div>
+
+                        <div className="col-md-3">
+                            <label><strong>Amenities:</strong></label>
+                            <div className="mb-2">
+                                {room.amenities.map((ammenn, i) => (
+                                    <span key={i} className="badge bg-primary me-1" onClick={() => handleAmenRemove(ammenn)} style={{ cursor: 'pointer' }}>
+                                        {ammenn} x
+                                    </span>
+                                ))}
+                            </div>    
+                            
+                            <select className="form-control" onChange={handleAmenSelect}>
+                                <option value="">-Select Amenity-</option>
+                                {allAmenities.map((ament, i) => (
+                                    <option key={i} value={ament}>{ament}</option>
+                                ))}
+                            </select>
+                        </div> 
+                                        
+                            <div className="col-md-2">
+                                <label><strong>Status:</strong></label>
+                                <select name="status" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.status} required>  
+                                    <option value="">-- Select Status --</option>
+                                    <option value="Available">Available</option>
+                                    <option value="Unavailable">Unavailable</option>
+                                </select>
+
+                                <label><strong>Reason:</strong></label>
+                                <input type="text" name="reason" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.reason || ''}/>
+                            </div>       
+                    </div>
+                    <button className="btn btn-success mt-3" onClick={handleEdit}>Submit</button>
                 </div>
-
-                <div className="col-md-3">
-                    <label><strong>Amenities:</strong></label>
-                    <div className="mb-2">
-                        {room.amenities.map((ammenn, i) => (
-                            <span key={i} className="badge bg-primary me-1" onClick={() => handleAmenRemove(ammenn)} style={{ cursor: 'pointer' }}>
-                                {ammenn} x
-                            </span>
-                        ))}
-                    </div>    
-                    
-                    <select className="form-control" onChange={handleAmenSelect}>
-                        <option value="">-Select Amenity-</option>
-                        {allAmenities.map((ament, i) => (
-                            <option key={i} value={ament}>{ament}</option>
-                        ))}
-                    </select>
-                </div> 
-                                
-                    <div className="col-md-2">
-                        <label><strong>Status:</strong></label>
-                        <select name="status" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.status} required>  
-                            <option value="">-- Select Status --</option>
-                            <option value="Available">Available</option>
-                            <option value="Unavailable">Unavailable</option>
-                        </select>
-
-                        <label><strong>Reason:</strong></label>
-                        <input type="text" name="reason" className="form-control rounded-0 mb-2" onChange={handleChange} value={room.reason || ''}/>
-                    </div>       
             </div>
-            <button className="btn btn-success mt-3" onClick={handleEdit}>Submit</button>
-        </div>
+        )}
     </div>
   );
 };

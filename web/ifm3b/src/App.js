@@ -9,6 +9,7 @@ import Profile from "./elements/Profile";
 import ProfileUpdate from "./elements/ProfileUpdate";
 import HR from "./elements/HR";
 import StockAmenities from "./elements/StockAmenities";
+import Amenities from "./elements/Amenities";
 import Rooms from "./elements/Rooms";
 import RoomById from "./elements/RoomById";
 import EditRoom from "./elements/EditRoom";
@@ -50,9 +51,11 @@ const showNav = !hideNavRoutes.includes(location.pathname);
           <Route path="/addroom" exact element = {<AddRoom/>}/>
           <Route path="/bookroom" exact element = {<BookRoom/>}/>
 
+          <Route path="/stockamenities" exact element = {<StockAmenities/>}/>
+          <Route path="/amenities" exact element = {<Amenities/>}/>
+
           <Route path="/report" exact element = {<Report/>}/>
           <Route path="/hr" exact element = {<HR/>}/>
-          <Route path="/stockamenities" exact element = {<StockAmenities/>}/>
           <Route path="/profile" exact element = {<Profile/>}/>
           <Route path="/profileupdate" exact element = {<ProfileUpdate/>}/>
           <Route path="/history" exact element = {<History/>}/>

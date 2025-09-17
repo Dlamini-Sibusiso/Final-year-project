@@ -68,7 +68,7 @@ const AddRoom = () => {
 
     const handleBack = () => {
         navigate('/rooms');
-    }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -162,9 +162,9 @@ const AddRoom = () => {
 
             {isLoggedIn && (
                 <div className='container mt-4'>
-                    <button className="mb-4 top-button loginForm" onClick={handleBack}>Back</button>
+                    <button className="mb-4 top-button loginForm" onClick={handleBack}>Back to Rooms</button>
                 <div className="p-4 border rounded shadow-sm" style={{ maxWidth: '500px', margin: '0 auto'}}>
-                <form onSubmit={handleSubmit} encType="multipart/form-data" style={{ maxWidth: 500, margin: 'auto' }}>
+                <form onSubmit={handleSubmit} encType="multipart/form-data" style={{ maxWidth: 800, margin: 'auto' }}>
                     <h1 className="d-flex justify-content-center align-items-center">Add Room</h1>
                         {errMsg && (
                             <div className="alert alert-warning alert-dismissible fade show mt-3" role="alert">
@@ -230,7 +230,7 @@ const AddRoom = () => {
                         <label>Room Image:</label>
                         <input type="file" name="image" className="form-control rounded-0 mb-2" accept="image/*" onChange={handleImage}/>
 
-                    <button type="submit" className="bt btn-primary w-100 rounded btnColor">submit</button>
+                    <button type="submit" className="btn btn-success w-100 me-2">submit</button>
                 </form>
                 </div>
                 </div>
