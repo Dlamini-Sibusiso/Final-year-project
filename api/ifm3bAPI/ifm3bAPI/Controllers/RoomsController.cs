@@ -20,6 +20,7 @@ namespace ifm3bAPI.Controllers
             _env = env;
         }
 
+        //Adding room
         [HttpPost("create")]
         public async Task<IActionResult> UploadRoom([FromForm] UploadRoomDto uploadRoomDto)
         {
@@ -58,7 +59,7 @@ namespace ifm3bAPI.Controllers
             return Ok(new { message = "Room successfully added" });
         }
 
-        //api/Rooms
+        //api/Rooms getting all available rooms
         [HttpGet]
         public async Task<IActionResult> GetAllRooms()
         {
@@ -66,11 +67,12 @@ namespace ifm3bAPI.Controllers
             return Ok(rooms);
         }
 
+        //get room with room id 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetRoomById(string id)
+        public async Task<IActionResult> GetRoomById(string id)
         {
-            var room = dbContext.Rooms.Find(id);
+            var room = await dbContext.Rooms.FindAsync(id);
             if (room is null)
             {
                 return NotFound(new { message = "No room was found" });//404 result

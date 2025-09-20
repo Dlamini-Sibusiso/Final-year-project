@@ -170,7 +170,7 @@ namespace ifm3bAPI.Controllers
         //Update or Edit using employee_number
         [HttpPut]
         [Route("{id:int}")]
-        public IActionResult UpdateRegister(int id, UpdateRegisterDto updateRegisterDto) 
+        public async Task<IActionResult> UpdateRegister(int id, UpdateRegisterDto updateRegisterDto) 
         {
             //Validating the incoming request body
             if (!ModelState.IsValid)
@@ -179,7 +179,7 @@ namespace ifm3bAPI.Controllers
             }
 
             //finding user by searching table Registers
-            var user = dbContext.Registers.Find(id);
+            var user = await dbContext.Registers.FindAsync(id);
 
             if (user is null)
             {
@@ -193,16 +193,16 @@ namespace ifm3bAPI.Controllers
             user.Email = updateRegisterDto.Email;
             user.Role = updateRegisterDto.Role;
  
-            dbContext.SaveChanges();//save the changes made to the database
+            await dbContext.SaveChangesAsync();//save the changes made to the database
             return Ok(user);
         }
 
         //Delete user in Register controller
         [HttpDelete]
         [Route("{id:int}")]
-        public IActionResult DeleteRegister(int id) 
+        public async Task<IActionResult> DeleteRegister(int id) 
         {
-            var user = dbContext.Registers.Find(id);
+            var user = await dbContext.Registers.FindAsync(id);
 
             if (user is null)
             {
@@ -210,7 +210,7 @@ namespace ifm3bAPI.Controllers
             }
 
             dbContext.Registers.Remove(user);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return Ok(user);
         }
 
