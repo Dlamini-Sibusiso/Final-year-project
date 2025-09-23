@@ -90,7 +90,7 @@ namespace ifm3bAPI.Controllers
                     await dbContext.SaveChangesAsync();//save the changes made to the database
                     return Ok(staffEntity);
                 }
-                return Conflict(new { message = "User already exist,sign-in or sign-up" });
+                return Conflict(new { message = "User already exist, sign-in or sign-up" });
             }
             catch (Exception ex)
             {

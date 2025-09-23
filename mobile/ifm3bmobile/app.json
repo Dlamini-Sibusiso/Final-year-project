@@ -17,7 +17,8 @@
       "**/*"
     ],
     "android": {
-      "permissions": []
+      "permissions": [],
+      "package": "com.anonymous.ifm3bmobile"
     }
   }
 }

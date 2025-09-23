@@ -202,16 +202,22 @@ namespace ifm3bAPI.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> DeleteRegister(int id) 
         {
-            var user = await dbContext.Registers.FindAsync(id);
+            try { 
+                var user = await dbContext.Registers.FindAsync(id);
 
-            if (user is null)
-            {
-                return NotFound(new { meassage = "The user was not found"});
+                if (user is null)
+                {
+                    return NotFound(new { meassage = "The user was not found"});
+                }
+
+                dbContext.Registers.Remove(user);
+                await dbContext.SaveChangesAsync();
+                return Ok(user);
             }
-
-            dbContext.Registers.Remove(user);
-            await dbContext.SaveChangesAsync();
-            return Ok(user);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error while deleting user in Registers : {ex.Message}");
+            }
         }
 
         [HttpPost("forgotpassword")]

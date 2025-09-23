@@ -8,4 +8,4 @@ const Layout = () => {
   )
 }
 
-export default tabLayout;
+export default Layout;

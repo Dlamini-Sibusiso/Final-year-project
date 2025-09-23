@@ -40,6 +40,7 @@ const Register = () => {
         try{
             const res = await axios.post("http://localhost:5289/api/Register/register", formData) 
             setOkmsg({message: [res.data.message]})
+
         }catch(err){
             console.error(err.message)
 
@@ -93,31 +94,31 @@ const Register = () => {
                 <h1 style={{textAlign:'center'}}>Register/ Sign Up</h1>
                 <form onSubmit={handleClick}>
                     <label htmlFor="password">Password:</label>
-                    <input type="text" placeholder="Enter password" className="form-control rounded-0 mb-3" onChange={handleChange} name="Password" required/>
+                    <input type="text" autoComplete="off" placeholder="Enter password" className="form-control rounded-0 mb-3" onChange={handleChange} name="Password" required/>
                     
                     <label htmlFor="username">Username:</label>
-                    <input type="text" placeholder="Enter username" className="form-control rounded-0 mb-3" onChange={handleChange} name="Username" required/>
+                    <input type="text" autoComplete="off" placeholder="Enter username" className="form-control rounded-0 mb-3" onChange={handleChange} name="Username" required/>
                     
                     <label htmlFor="department">Department:</label>
-                    <input type="text" placeholder="Enter department" className="form-control rounded-0 mb-3" onChange={handleChange} name="Department" required/>
+                    <input type="text" autoComplete="off" placeholder="Enter department" className="form-control rounded-0 mb-3" onChange={handleChange} name="Department" required/>
 
                     <label htmlFor="Phone number">Phone Number:</label>
-                    <input type="number" placeholder="Enter phone number" className="form-control rounded-0 mb-3" onChange={handleChange} name="Phone_Number" required/>
+                    <input type="number" autoComplete="off" placeholder="Enter phone number" className="form-control rounded-0 mb-3" onChange={handleChange} name="Phone_Number" required/>
                     {errors.Phone_Number && errors.Phone_Number.map((sms, i) => (
                         <div key={i} className="alert alert-warning">{sms}</div>
                     ))}
 
                     <label htmlFor="Email">Email:</label>
-                    <input type="text" placeholder="Enter email" className="form-control rounded-0 mb-3" onChange={handleChange} name="Email" required/>
+                    <input type="text" autoComplete="off" placeholder="Enter email" className="form-control rounded-0 mb-3" onChange={handleChange} name="Email" required/>
                     {errors.Email && errors.Email.map((sms, i) => (
                         <div key={i} className="alert alert-warning">{sms}</div>
                     ))}
 
                     <label htmlFor="Employee Number">Employee Number:</label>
-                    <input type="number" className="form-control rounded-0 mb-3" name="Id" value={formData.Id} readOnly required/>
+                    <input type="number" autoComplete="off" className="form-control rounded-0 mb-3" name="Id" value={formData.Id} readOnly required/>
                     
                     <label htmlFor="Role">Role:</label>
-                    <input type="text" className="form-control rounded-0 mb-3" name="Role" value={formData.Role} readOnly required/>
+                    <input type="text" autoComplete="off" className="form-control rounded-0 mb-3" name="Role" value={formData.Role} readOnly required/>
 
                     <button className="btn btn-success w-100 rounded-0 mb-2 btnColor" type="submit">Submit</button>
                     <p>Have an account? <Link to="/" style={{color:'orange'}}> Sign in</Link></p>
