@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ifm3bAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8385ffe0a26949f70d8b1dee82e6e6089df65805")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47576eed6bc586470d30c39a2c0a3b2daaac4e7e")]
 [assembly: System.Reflection.AssemblyProductAttribute("ifm3bAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ifm3bAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

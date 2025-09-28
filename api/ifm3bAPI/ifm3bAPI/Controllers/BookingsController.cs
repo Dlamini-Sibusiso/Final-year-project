@@ -3,6 +3,7 @@ using ifm3bAPI.Models;
 using ifm3bAPI.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ifm3bAPI.Controllers
 {
@@ -224,6 +225,26 @@ namespace ifm3bAPI.Controllers
             dbContext.SaveChanges();
 
             return Ok("Booking confirmed successfully.");
+        }
+
+        //get all Bookings 
+        [HttpGet]
+        public async Task<IActionResult> GetAllBookings()
+        {
+            try
+            {
+                var allBookings = await dbContext.Bookings.ToListAsync();
+                if (!allBookings.Any()) //check if list is empty
+                {
+                    return NotFound(new { message = "No Bookings was found" });
+                }
+
+                return Ok(allBookings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error while getting all bookings: {ex.Message}");
+            }
         }
     }
 }

@@ -22,6 +22,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textDecorationLine: 'underline',
     },
+    homeTitle:{
+        color:'blue', 
+        fontSize: 30,
+        textAlign:'center',
+        marginBottom: 20,
+        textDecorationLine: 'underline',
+    },
     label:{
         color:'white', 
         fontSize: 15,
@@ -50,6 +57,76 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+    },
+    topButtons: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
+    },
+    topButton: {
+        marginBottom: 10,
+        backgroundColor: '#007bff',
+        padding: 10,
+        borderRadius: 5,
+        alignSelf: 'flex-start',
+    },
+    topButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    statusButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    statusButton: {
+        backgroundColor: '#6c757d',
+        padding: 8,
+        borderRadius: 5,
+        marginRight: 10,
+    },
+    statusButtonText: {
+        color: '#fff',
+    },
+    listContent: {
+        padding: 10,
+    },
+    bookingCard: {
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        padding: 15,
+        marginBottom: 15,
+        elevation: 2,
+    },
+    field: {
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        marginTop: 10,
+        justifyContent: 'space-between',
+    },
+    actionButton: {
+        flex: 1,
+        backgroundColor: '#28a745',
+        padding: 10,
+        marginHorizontal: 5,
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    noDataText: {
+        textAlign: 'center',
+        marginTop: 50,
+        color: '#555',
+        fontSize: 16,
     },
 });
 

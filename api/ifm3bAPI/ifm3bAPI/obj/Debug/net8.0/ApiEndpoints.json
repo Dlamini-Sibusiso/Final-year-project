@@ -53,6 +53,16 @@
   },
   {
     "ContainingType": "ifm3bAPI.Controllers.BookingsController",
+    "Method": "GetAllBookings",
+    "RelativePath": "api/Bookings",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.BookingsController",
     "Method": "AddBookingTemp",
     "RelativePath": "api/Bookings/AddTemp",
     "HttpMethod": "POST",

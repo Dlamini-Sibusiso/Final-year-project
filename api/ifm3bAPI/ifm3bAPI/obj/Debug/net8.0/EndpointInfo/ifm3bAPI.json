@@ -256,6 +256,18 @@
         }
       }
     },
+    "/api/Bookings": {
+      "get": {
+        "tags": [
+          "Bookings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Register": {
       "get": {
         "tags": [

@@ -49,7 +49,7 @@ const HR = () => {
             return;
         }
 
-        try {
+        try {//getting users with employee number
             const response = await axios.get(`http://localhost:5289/api/Register/${regNum}`);
             setReg(response.data);
         } catch (err) {

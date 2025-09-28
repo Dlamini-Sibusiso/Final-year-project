@@ -1,15 +1,18 @@
-import { Alert, ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import { Alert, ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../assets/style/styles';
 import welcome  from '../assets/images/welcome.png';
-import { useState } from 'react';
 import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
+//import * as SecureStore from 'expo-secure-store';
+
+import { useAuth } from '../hooks/useAuth';//new
 
 const Login = () => {
     const router = useRouter();
+
+    const { login } = useAuth();//new
 
     const [logginData, setData] = useState({
         Username:"",
@@ -24,7 +27,7 @@ const Login = () => {
     const signingIn = async () => {
         setLoading(true)
 
-        Alert.alert("Debug", `username: ${logginData.Username}\nPassword: ${logginData.Password}`);
+        //Alert.alert("Debug", `username: ${logginData.Username}\nPassword: ${logginData.Password}`);
         console.log("Sending data:", logginData);
 
         try {
@@ -37,17 +40,19 @@ const Login = () => {
                 }
             );
             console.log("Login success:", response.data);
-            const { token } = response.data;
+            //const { token } = response.data;
+            const token = response.data.token;
 
             //save the token securely
-            await SecureStore.setItemAsync('userToken', token);
-            console.log("Login success:", response.data);
-
+           // await SecureStore.setItemAsync('userToken', token);
+            await login(token);
+            //console.log("Login success:", response.data);
+        
             //move to home page after saving
-            router.push('/(tabs)/Home');
+            router.replace('/home');
         } catch (error) {
             console.log('Login error:', error.message);
-            console.log('Error response:', error.response?.data);
+            console.log('Error response:', error.response?.data.message);
             const msg = error.response?.data?.message || 'Login Failed. Please check credentials';
             Alert.alert('Login error', msg);
         } finally {
