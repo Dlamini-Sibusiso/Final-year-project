@@ -77,6 +77,11 @@ const Register = () => {
         {
             validationErrors.Email = ['Invalid email format']
         }
+        //Employee number and Role validation
+        if (formData.Role === "" || formData.Id === "")
+        {
+            validationErrors.Role = ['Employee number and Role cannot be empty, go to login page and follow the procesure to sign up']
+        }
 
         return validationErrors;
     };
@@ -116,14 +121,20 @@ const Register = () => {
 
                     <label htmlFor="Employee Number">Employee Number:</label>
                     <input type="number" autoComplete="off" className="form-control rounded-0 mb-3" name="Id" value={formData.Id} readOnly required/>
-                    
+
                     <label htmlFor="Role">Role:</label>
                     <input type="text" autoComplete="off" className="form-control rounded-0 mb-3" name="Role" value={formData.Role} readOnly required/>
-
+                    
                     <button className="btn btn-success w-100 rounded-0 mb-2 btnColor" type="submit">Submit</button>
                     <p>Have an account? <Link to="/" style={{color:'orange'}}> Sign in</Link></p>
                 </form>
             </div>
+            
+            {/*Employee number and Role error message if empty*/}
+            {errors.Role && errors.Role.map((sms, i) => (
+                <div key={i} className="alert alert-warning">{sms}</div>
+            ))}
+
             {errors.message && errors.message.map((sms, i) => (
                 <div key={i} className="alert alert-warning">{sms}</div> 
             ))}

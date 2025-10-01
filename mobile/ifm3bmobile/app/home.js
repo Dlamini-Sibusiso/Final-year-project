@@ -50,9 +50,6 @@ export default function Home() {
 
   const handleLogout = async () => {
     try {
-      //Remove the token from SecureStore
-      //await SecureStore.deleteItemAsync('userToken');
-
       await logout();
 
       //logging out to login page
@@ -61,8 +58,6 @@ export default function Home() {
     } catch (err) {
       console.error('Logout failed:', err)
     }
-   //await logout();
-   //router.replace('/');
   };
 
   return (

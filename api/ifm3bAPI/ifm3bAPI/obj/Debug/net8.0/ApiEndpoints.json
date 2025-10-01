@@ -63,6 +63,22 @@
   },
   {
     "ContainingType": "ifm3bAPI.Controllers.BookingsController",
+    "Method": "GetBookingsById",
+    "RelativePath": "api/Bookings/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.BookingsController",
     "Method": "AddBookingTemp",
     "RelativePath": "api/Bookings/AddTemp",
     "HttpMethod": "POST",
@@ -104,6 +120,27 @@
       {
         "Name": "roomSearchDto",
         "Type": "ifm3bAPI.Models.RoomSearchDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.BookingsController",
+    "Method": "UpdateBookingStatus",
+    "RelativePath": "api/Bookings/status/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "bookingStatusUpdateDto",
+        "Type": "ifm3bAPI.Models.BookingStatusUpdateDto",
         "IsRequired": true
       }
     ],
@@ -586,6 +623,91 @@
       {
         "Name": "id",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "CancelBookingStock",
+    "RelativePath": "api/Stocks/cancel/{bookingId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookingId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "AddToStaging",
+    "RelativePath": "api/Stocks/staging/{bookingId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookingId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "Dto",
+        "Type": "ifm3bAPI.Models.StagingDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "RemoveStaging",
+    "RelativePath": "api/Stocks/staging/{stagingId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "stagingId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "Submit",
+    "RelativePath": "api/Stocks/submit/{bookingId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookingId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.StocksController",
+    "Method": "GetTempStockById",
+    "RelativePath": "api/Stocks/tempStock/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

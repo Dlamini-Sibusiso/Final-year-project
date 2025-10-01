@@ -128,6 +128,66 @@ const styles = StyleSheet.create({
         color: '#555',
         fontSize: 16,
     },
+    textArea: {
+        height: 100,
+        borderColor: 'gray',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5,
+        textAlignVertical: 'top',
+        backgroundColor: '#fff',
+        marginBottom: 10,
+    },
+    submitButton: {
+        backgroundColor: '#2196F3',
+        paddingVertical: 12,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    submitButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    scrollView: {
+        paddingBottom: 60,
+    },
+    labelb: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#555',
+        marginBottom: 5,
+    },
+    textAreab: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 6,
+        padding: 10,
+        backgroundColor: '#fff',
+        minHeight: 100,
+        textAlignVertical: 'top',
+    },
+    textInputb: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 6,
+        padding: 10,
+        backgroundColor: '#fff',
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        marginTop: 30,
+        marginBottom: 10,
+        color: '#222',
+    },
+    header: {
+        fontSize: 22,
+        fontWeight: '700',
+        marginBottom: 20,
+        color: '#333',
+    },
 });
 
 export default styles;

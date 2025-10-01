@@ -14,5 +14,8 @@ namespace ifm3bAPI.Data
         public DbSet <Room> Rooms { get; set; }
         public DbSet <Booking> Bookings { get; set; }
         public DbSet <BookingTemp> BookingTemps { get; set; }
+
+        public DbSet<TempStockSelection> TempStockSelections { get; set; }
+        
     }
 }

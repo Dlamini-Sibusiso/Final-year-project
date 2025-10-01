@@ -39,12 +39,13 @@ export default function Bookings() {
     router.replace('/');
   };
 
+  //Booking details
   const handleViewDetails = (booking) => {
-    router.push({ pathname: '/viewDetails', params: { id: booking.Id } });
+    router.push({ pathname: '/(book)/viewDetails', params: { id: booking.id } });
   };
 
   const handleAddStock = (booking) => {
-    router.push({ pathname: '/addStock', params: { id: booking.Id } });
+    router.push({ pathname: '/(book)/addStock', params: { id: booking.id } });
   };
 
   const handleDisapproved = () => {
@@ -54,37 +55,31 @@ export default function Bookings() {
   const handleClosed = () => {
     router.push('/closedBookings');
   };
-/*
-  if (loading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
-*/
+
   const renderBooking = ({ item: booking }) => {
     if (!booking)
     {
       return null;
     }
-    return(
-          <View style={styles.bookingCard}>
-            <Text style={styles.field}>Room ID: {booking.roomId}</Text>
-            <Text style={styles.field}>Start Time: {new Date(booking.sesion_Start).toLocaleString()}</Text>
-            <Text style={styles.field}>Status: {booking.status}</Text>
 
-            <View style={styles.buttonRow}>
-              <TouchableOpacity style={styles.actionButton} onPress={() => handleViewDetails(booking)}>
-                <Text style={styles.buttonText}>View Details</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton} onPress={() => handleAddStock(booking)}>
-                <Text style={styles.buttonText}>Add Stock</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        );
-      };
+    return(
+      <View style={styles.bookingCard}>
+        <Text style={styles.field}>Room ID: {booking.roomId}</Text>
+        <Text style={styles.field}>Start Time: {new Date(booking.sesion_Start).toLocaleString()}</Text>
+        <Text style={styles.field}>Status: {booking.status}</Text>
+
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.actionButton} onPress={() => handleViewDetails(booking)}>
+            <Text style={styles.buttonText}>View Details</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.actionButton} onPress={() => handleAddStock(booking)}>
+            <Text style={styles.buttonText}>Add Stock</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,7 +107,7 @@ export default function Bookings() {
       {loading ? (
         <ActivityIndicator size="large" />
       ) : bookings.length === 0 ? (
-        <Text style={styles.noData}>No pending bookings found.</Text>
+        <Text style={styles.noDataText}>No pending bookings found.</Text>
       ) : (
         <FlatList
           data={bookings}

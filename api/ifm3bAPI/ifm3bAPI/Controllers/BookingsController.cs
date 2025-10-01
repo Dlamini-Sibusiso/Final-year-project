@@ -65,6 +65,7 @@ namespace ifm3bAPI.Controllers
             return Ok( availableRooms );
         }
 
+        //add booking to temp
         [HttpPost("AddTemp")]
         public IActionResult AddBookingTemp([FromBody] BookingRequestDto bookingRequestDto)
         {
@@ -171,9 +172,9 @@ namespace ifm3bAPI.Controllers
         //Delete bookingtemp while booking 
         [HttpDelete]
         [Route("TempbyId/{id:int}")]
-        public IActionResult DeleteTempById(int id)
+        public async Task<IActionResult> DeleteTempById(int id)
         {
-            var bookTemp = dbContext.BookingTemps.Find(id);
+            var bookTemp = await dbContext.BookingTemps.FindAsync(id);
            
             if (bookTemp is null)
             {
@@ -181,7 +182,7 @@ namespace ifm3bAPI.Controllers
             }
 
             dbContext.BookingTemps.Remove(bookTemp);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return Ok(bookTemp);
         }
 
@@ -245,6 +246,46 @@ namespace ifm3bAPI.Controllers
             {
                 return StatusCode(500, $"Error while getting all bookings: {ex.Message}");
             }
+        }
+
+        //get bookings with id 
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetBookingsById(Guid id)
+        {
+            try
+            {
+                var book = await dbContext.Bookings.FindAsync(id);
+                if (book is null)
+                {
+                    return NotFound(new { message = "No booking was found" });//404 result
+                }
+                return Ok(book);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error while getting all bookings: {ex.Message}");
+            }
+        }
+
+        //Update booking status and statusInfo 
+        [HttpPut("status/{id:Guid}")]
+        public async Task<IActionResult> UpdateBookingStatus(Guid id, [FromBody] BookingStatusUpdateDto bookingStatusUpdateDto)
+        {
+            var booking = await dbContext.Bookings.FindAsync(id);
+            
+            if (booking == null)
+            {
+                return NotFound(new { message = "Booking not found" });
+            }
+            
+            booking.Status = bookingStatusUpdateDto.Status;
+            booking.StatusInfo = bookingStatusUpdateDto.StatusInfo;
+            
+            dbContext.Bookings.Update(booking);
+            await dbContext.SaveChangesAsync();
+            
+            return Ok(new { message = "Status updated successfully" });
         }
     }
 }
