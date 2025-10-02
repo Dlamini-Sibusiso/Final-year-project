@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View, Text, Button, TextInput, FlatList, Alert,
-  StyleSheet, TouchableOpacity, Modal, Pressable, ScrollView
-} from 'react-native';
+import { View, Text, Button, TextInput, FlatList, Alert, StyleSheet, TouchableOpacity, Modal, Pressable, ScrollView } from 'react-native';
 import axios from 'axios';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,17 +15,19 @@ export default function AddStock() {
   const [selectedQuantity, setSelectedQuantity] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const API = 'http://10.0.2.2:5289/api/Stocks';
-
   useEffect(() => {
-    if (!bookingId) return;
+    if (!bookingId) 
+    {
+      return;
+    }
+
     fetchStocks();
     fetchStaging();
   }, [bookingId]);
 
   const fetchStocks = async () => {
     try {
-      const res = await axios.get(`${API}`);
+      const res = await axios.get("http://10.0.2.2:5289/api/Stocks");
       setStocks(res.data);
     } catch (err) {
       console.error("Failed to fetch stocks", err);
@@ -37,58 +36,58 @@ export default function AddStock() {
 
   const fetchStaging = async () => {
     try {
-      const res = await axios.get(`${API}/tempStock/${bookingId}`);
+      const res = await axios.get(`http://10.0.2.2:5289/api/Stocks/tempStock/${bookingId}`);
       setStaging(res.data);
     } catch (err) {
-      if (err.response?.status === 404) {
-      setStaging([]); // Treat 404 as "no selection yet"
-    } else {
-      console.error("Failed to fetch staging", err);
-    }
+      if (err.response?.status === 404) 
+      {
+        setStaging([]); // Treat 404 as "no selection yet"
+      } else {
+        console.error("Failed to fetch staging", err);
+      }
     }
   };
 
   const handleAdd = async () => {
-    if (!selectedStockId || !selectedQuantity) {
+    if (!selectedStockId || !selectedQuantity) 
+    {
       Alert.alert("Select stock and quantity");
       return;
     }
 
     const qty = parseInt(selectedQuantity);
-    if (isNaN(qty) || qty <= 0) {
+    if (isNaN(qty) || qty <= 0) 
+    {
       Alert.alert("Quantity must be a positive number");
       return;
     }
 
     try {
-      await axios.post(`${API}/staging/${bookingId}`, {
-        stockId: selectedStockId,
-        quantity: qty,
-        userId: "someUser"
-      });
+      await axios.post(`http://10.0.2.2:5289/api/Stocks/staging/${bookingId}`, 
+        {
+          stockId: selectedStockId,
+          quantity: qty,
+          userId: "someUser"
+        });
+
       setSelectedQuantity('');
       fetchStocks();
       fetchStaging();
     } catch (err) {
       const data = err.response?.data;
-      if (data?.available !== undefined) {
+      if (data?.available !== undefined) 
+      {
         const { available, requested } = data;
-        Alert.alert("Insufficient stock",
-          `Only ${available} out of ${requested} available`,
-          [
-            {
-              text: `Add ${available}`,
-              onPress: () => handleAddPartial(available)
-            },
-            {
-              text: `Add unfulfilled (${requested - available}) to NewStock`,
-              onPress: () => {
-                if (available > 0) handleAddPartial(available);
-              }
-            },
-            { text: "Cancel", style: "cancel" }
-          ]
-        );
+        Alert.alert("Insufficient stock", `Only ${available} out of ${requested} available`,
+        [{ text: `Add ${available}`, onPress: () => handleAddPartial(available) },
+          { text: `Add unfulfilled (${requested - available}) to NewStock`,
+            onPress: () => {  if (available > 0)
+                              {
+                                handleAddPartial(available); 
+                              }}
+          },
+          { text: "Cancel", style: "cancel" }
+        ]);
       } else {
         console.error("Error adding", err);
         Alert.alert("Error adding stock", err.toString());
@@ -98,11 +97,13 @@ export default function AddStock() {
 
   const handleAddPartial = async (qty) => {
     try {
-      await axios.post(`${API}/staging/${bookingId}`, {
-        stockId: selectedStockId,
-        quantity: qty,
-        userId: "someUser"
-      });
+      await axios.post(`http://10.0.2.2:5289/api/Stocks/staging/${bookingId}`, 
+        {
+          stockId: selectedStockId,
+          quantity: qty,
+          userId: "someUser"
+        });
+        
       fetchStocks();
       fetchStaging();
     } catch (err) {
@@ -112,7 +113,8 @@ export default function AddStock() {
 
   const handleRemove = async (stagingId) => {
     try {
-      await axios.delete(`${API}/staging/${stagingId}`);
+      await axios.delete(`http://10.0.2.2:5289/api/Stocks/staging/${stagingId}`);
+      
       fetchStocks();
       fetchStaging();
     } catch (err) {
@@ -122,7 +124,7 @@ export default function AddStock() {
 
   const handleSubmitAll = async () => {
     try {
-      await axios.post(`${API}/submit/${bookingId}`);
+      await axios.post(`http://10.0.2.2:5289/api/Stocks/submit/${bookingId}`);
       Alert.alert("Success", "Stocks submitted");
       router.back();
     } catch (err) {
@@ -133,7 +135,7 @@ export default function AddStock() {
 
   const handleCancelAll = async () => {
     try {
-      await axios.delete(`${API}/cancel/${bookingId}`);
+      await axios.delete(`http://10.0.2.2:5289/api/Stocks/cancel/${bookingId}`);
       Alert.alert("Cancelled", "Stock selections have been rolled back.");
       router.back();
     } catch (err) {
@@ -145,12 +147,9 @@ export default function AddStock() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Add Stock to Booking</Text>
-
+      
       <Text style={styles.label}>Select Stock:</Text>
-      <TouchableOpacity
-        onPress={() => setShowDropdown(true)}
-        style={styles.dropdownButton}
-      >
+      <TouchableOpacity onPress={() => setShowDropdown(true)} style={styles.dropdownButton}>
         <Text style={styles.dropdownButtonText}>
           {selectedStockId ? selectedStockId : 'Select Stock'}
         </Text>
@@ -161,32 +160,21 @@ export default function AddStock() {
           <View style={styles.dropdownModal}>
             <ScrollView>
               {stocks.map((stock) => (
-                <Pressable
-                  key={stock.stockId}
-                  onPress={() => {
-                    setSelectedStockId(stock.stockId);
-                    setShowDropdown(false);
-                  }}
-                  style={styles.dropdownOption}
-                >
+                <Pressable key={stock.stockId} onPress={() => {setSelectedStockId(stock.stockId); setShowDropdown(false);}} style={styles.dropdownOption}>
                   <Text>
                     {stock.stockId} (Available: {stock.stockAvailable})
                   </Text>
                 </Pressable>
-              ))}
+                )
+              )}
             </ScrollView>
             <Button title="Close" onPress={() => setShowDropdown(false)} />
+
           </View>
         </View>
       </Modal>
 
-      <TextInput
-        placeholder="Enter quantity"
-        keyboardType="numeric"
-        value={selectedQuantity}
-        onChangeText={setSelectedQuantity}
-        style={styles.input}
-      />
+      <TextInput placeholder="Enter quantity" keyboardType="numeric" value={selectedQuantity} onChangeText={setSelectedQuantity} style={styles.input}/>
 
       <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
         <Text style={styles.buttonText}>Add to Selection</Text>
@@ -201,7 +189,8 @@ export default function AddStock() {
             <Text>{item.stockId} — Qty: {item.quantity}</Text>
             <Button title="Remove" onPress={() => handleRemove(item.stagingId)} />
           </View>
-        )}
+          )
+        }
         ListEmptyComponent={<Text style={styles.emptyText}>No stock selected.</Text>}
       />
 
@@ -209,6 +198,7 @@ export default function AddStock() {
         <TouchableOpacity style={styles.submitBtn} onPress={handleSubmitAll}>
           <Text style={styles.footerBtnText}>Submit All</Text>
         </TouchableOpacity>
+        
         <TouchableOpacity style={styles.cancelBtn} onPress={handleCancelAll}>
           <Text style={styles.footerBtnText}>Cancel</Text>
         </TouchableOpacity>

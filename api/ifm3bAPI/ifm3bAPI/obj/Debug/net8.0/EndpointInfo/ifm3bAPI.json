@@ -503,6 +503,48 @@
         }
       }
     },
+    "/api/Register/updateprofile/{id}": {
+      "put": {
+        "tags": [
+          "Register"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Register/forgotpassword": {
       "post": {
         "tags": [
@@ -1453,6 +1495,29 @@
             "format": "int32"
           },
           "stockReport": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateProfileDto": {
+        "required": [
+          "department",
+          "email",
+          "phone_Number"
+        ],
+        "type": "object",
+        "properties": {
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone_Number": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
             "type": "string",
             "nullable": true
           }

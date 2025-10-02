@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ifm3bAPI.Controllers
 {   //localhost:5289/api/Registers
@@ -45,14 +48,21 @@ namespace ifm3bAPI.Controllers
         //get register (user) by id from db
         [HttpGet]
         [Route("{id:int}")]
-        public IActionResult GetRegisterById(int id)
+        public async Task<IActionResult> GetRegisterById(int id)
         {
-            var register = dbContext.Registers.Find(id);
-            if (register is null)
+            try
             {
-                return NotFound(new { message = "No user was found with that employee number" });//404 result
+                var register = await dbContext.Registers.FindAsync(id);
+                if (register is null)
+                {
+                    return NotFound(new { message = "No user was found with that employee number" });//404 result
+                }
+                return Ok(register);
             }
-            return Ok(register);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error while getting user by id : {ex.Message}");
+            }
         }
 
         //Adding register (user) to db
@@ -195,6 +205,38 @@ namespace ifm3bAPI.Controllers
  
             await dbContext.SaveChangesAsync();//save the changes made to the database
             return Ok(user);
+        }
+
+        //Update few profile details
+        [HttpPut("updateprofile/{id}")]
+        public async Task<IActionResult> UpdateProfile(int id, [FromBody] UpdateProfileDto updateProfileDto)
+        {
+            var user = await dbContext.Registers.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Validate phone number
+            if (!Regex.IsMatch(updateProfileDto.Phone_Number, @"^\d{10}$"))
+            {
+                return BadRequest("Phone number must be exactly 10 digits.");
+            }
+
+            // Validate email
+            if (!new EmailAddressAttribute().IsValid(updateProfileDto.Email))
+            {
+                return BadRequest("Invalid email address.");
+            }
+
+            // Update fields
+            user.Department = updateProfileDto.Department;
+            user.Phone_Number = updateProfileDto.Phone_Number;
+            user.Email = updateProfileDto.Email;
+
+            await dbContext.SaveChangesAsync();
+
+            return Ok("Profile updated successfully.");
         }
 
         //Delete user in Register controller
