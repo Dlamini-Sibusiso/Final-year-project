@@ -45,15 +45,10 @@ export default function Profile() {
     router.replace('/');
   };
 
-const handleProfile = () => {
-  router.push('/(prof)/profileEdit');
-};
-
-/*
-  const handlePass = () => {
-    setPassView(userId);
+  const handleProfile = () => {
+    router.push('/(prof)/profileEdit');
   };
-*/
+
   return (
     <SafeAreaView style={[styles.container, {paddingHorizontal: 20}]}>
       <ScrollView contentContainerStyle={styles.scrollView}>
@@ -89,10 +84,6 @@ const handleProfile = () => {
             <View style={styles.buttonRow}>
               <TouchableOpacity style={styles.actionButton} onPress={() => handleProfile()}>
                 <Text style={styles.buttonText}> Edit Profile </Text>
-              </TouchableOpacity>
-          
-              <TouchableOpacity style={styles.actionButton} onPress={() => handlePass(userDetails)}>
-                <Text style={styles.buttonText}>View Password</Text>
               </TouchableOpacity>
             </View>
           </View>

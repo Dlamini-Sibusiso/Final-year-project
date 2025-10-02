@@ -35,7 +35,8 @@ export default function Home() {
   const handleBooking = () => {
     router.push('/bookings')
   };
-
+  
+  //Aproved booking to be closed
   const handleStatus = () => {
     router.push('/statusUpdate')
   };

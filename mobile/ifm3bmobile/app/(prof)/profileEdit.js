@@ -97,18 +97,19 @@ export default function EditProfile() {
         ) :  (
 
           <View>
-              <Text style={styles.field}>Department:</Text>
+              <Text style={styles.header}>Edit Personal Details:</Text>
+              <Text style={styles.labelb}>Department:</Text>
               <TextInput style={styles.textInput} value={userDetails.department} onChangeText={value => handleChange('department', value)} placeholder="Department" />
 
-              <Text style={styles.field}> Phone Number:</Text>
+              <Text style={styles.labelb}> Phone Number:</Text>
               <TextInput style={styles.textInput} value={userDetails.phone_Number} onChangeText={value => handleChange('phone_Number', value)} keyboardType="number-pad" placeholder="10-digit phone" />
 
-              <Text style={styles.field}>Email:</Text>
+              <Text style={styles.labelb}>Email:</Text>
               <TextInput style={styles.textInput} value={userDetails.email} onChangeText={value => handleChange('email', value)} keyboardType="email-address" placeholder="Email" />
 
               <View style={styles.buttonRow}>
               <TouchableOpacity style={styles.actionButton} onPress={handleUpdate}>
-                <Text style={styles.buttonText}>Update Profile</Text>
+                <Text style={styles.buttonText}>Submit Changes</Text>
               </TouchableOpacity>
             </View>
 

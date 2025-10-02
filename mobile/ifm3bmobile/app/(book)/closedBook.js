@@ -1,30 +1,26 @@
 import { TouchableOpacity, Text, View, FlatList, ActivityIndicator, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import styles from '../assets/style/styles';
+import styles from '../../assets/style/styles';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
-export default function statusUpdate() {
+export default function closedBook() {
   const { logout } = useAuth();
   const router = useRouter();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedStatus, setSelectedStatus] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [statMasg, setStatMsg] = useState('');
-
   const fetchBookings = async () => {
     try {
       const res = await axios.get('http://10.0.2.2:5289/api/Bookings');
       console.log("All bookings from API:", res.data);
-      //selecting bookings with status approve
-      const approvedBookings = res.data.filter(b => b.status === 'Approve');
+      //selecting bookings with status Closed
+      const ClosedBookings = res.data.filter(b => b.status === 'Closed');
       
-      console.log("Filtered approved bookings:", approvedBookings);
-      setBookings(approvedBookings);
+      console.log("Filtered closed bookings:", ClosedBookings);
+      setBookings(ClosedBookings);
     } catch (err) {
       console.error('Error fetching bookings:', err);
       Alert.alert('Error', 'Failed to fetch bookings.');
@@ -37,44 +33,15 @@ export default function statusUpdate() {
     fetchBookings();
   }, []);
 
+  //Booking details
+  const handleViewDetails = (booking) => {
+    router.push({ pathname: '/viewClosedDetails', params: { id: booking.id } });
+  };
+
   //logging out
   const handleLogout = async () => {
     await logout();
     router.replace('/');
-  };
-
-  //Booking details
-  const handleViewDetails = (booking) => {
-    router.push({ pathname: '/(book)/viewStatusDetails', params: { id: booking.id } });
-  };
-
-   //Status reset to available
-  const handleStatus = async (booking, newStatus) => {
-  
-    if (!newStatus || newStatus.trim() ==='') 
-    {
-      setStatMsg('Please select a status.')
-      return;
-    }
-        
-    setStatMsg('');
-    console.log('Handle Update. New status:', newStatus);
-
-    try {
-      setIsSubmitting(true);
-      await axios.put(`http://10.0.2.2:5289/api/Bookings/status/${booking.id}`, 
-      {
-        Status: newStatus, 
-      });
-            
-      Alert.alert('Success', 'Status updated successfully.');
-      fetchBookings(); // Refresh booking info
-    } catch (err) {
-      console.error('Error updating status:', err);
-      Alert.alert('Error', 'Failed to update status.');
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   const renderBooking = ({ item: booking }) => {
@@ -88,16 +55,11 @@ export default function statusUpdate() {
         <Text style={styles.field}>Room ID: {booking.roomId}</Text>
         <Text style={styles.field}>End Time: {new Date(booking.sesion_End).toLocaleString()}</Text>
         <Text style={styles.field}>Status: {booking.status}</Text>
-
+        
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.actionButton} onPress={() => handleViewDetails(booking)}>
-            <Text style={styles.buttonText}>Verify Booking</Text>
+            <Text style={styles.buttonText}>View Details</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.actionButton} onPress={() => handleStatus(booking, 'Closed')}>
-            <Text style={styles.buttonText}>Reset Status</Text>
-          </TouchableOpacity>
-          
         </View>
       </View>
     );
@@ -113,8 +75,8 @@ export default function statusUpdate() {
         </TouchableOpacity>
 
         <View style={styles.statusButtons}>
-        <TouchableOpacity style={styles.statusButton} onPress={() => router.replace('/home')}>
-          <Text style={styles.statusButtonText}>Back Home</Text>
+        <TouchableOpacity style={styles.statusButton} onPress={() => router.back()}>
+          <Text style={styles.statusButtonText}>  Back  </Text>
         </TouchableOpacity>
         </View>
       </View>
@@ -123,7 +85,7 @@ export default function statusUpdate() {
       {loading ? (
         <ActivityIndicator size="large" />
       ) : bookings.length === 0 ? (
-        <Text style={styles.noDataText}>No approve bookings found.</Text>
+        <Text style={styles.noDataText}>No closed bookings found.</Text>
       ) : (
         <FlatList
           data={bookings}
@@ -135,4 +97,3 @@ export default function statusUpdate() {
     </SafeAreaView>
   )
 }
-

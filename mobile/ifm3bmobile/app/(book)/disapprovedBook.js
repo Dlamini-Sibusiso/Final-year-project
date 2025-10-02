@@ -1,12 +1,12 @@
-import { TouchableOpacity, Text, View, FlatList, ActivityIndicator, Alert } from 'react-native';
+import { TouchableOpacity, TextInput, Text, View, FlatList, ActivityIndicator, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import styles from '../assets/style/styles';
+import styles from '../../assets/style/styles';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
-export default function Bookings() {
+export default function disapprovedBook() {
   const { logout } = useAuth();
   const router = useRouter();
   const [bookings, setBookings] = useState([]);
@@ -16,11 +16,11 @@ export default function Bookings() {
     try {
       const res = await axios.get('http://10.0.2.2:5289/api/Bookings');
       console.log("All bookings from API:", res.data);
-      //selecting bookings with status pending
-      const pendingBookings = res.data.filter(b => b.status === 'Pending');
+      //selecting bookings with status Disapprove
+      const disapproveBookings = res.data.filter(b => b.status === 'Disapprove');
       
-      console.log("Filtered pending bookings:", pendingBookings);
-      setBookings(pendingBookings);
+      console.log("Filtered disapproved bookings:", disapproveBookings);
+      setBookings(disapproveBookings);
     } catch (err) {
       console.error('Error fetching bookings:', err);
       Alert.alert('Error', 'Failed to fetch bookings.');
@@ -33,30 +33,15 @@ export default function Bookings() {
     fetchBookings();
   }, []);
 
+  //Booking details
+  const handleViewDetails = (booking) => {
+    router.push({ pathname: '/viewDetails', params: { id: booking.id } });
+  };
+
   //logging out
   const handleLogout = async () => {
     await logout();
     router.replace('/');
-  };
-
-  //Booking details
-  const handleViewDetails = (booking) => {
-    router.push({ pathname: '/(book)/viewDetails', params: { id: booking.id } });
-  };
-
-  //Adding stock on booking
-  const handleAddStock = (booking) => {
-    router.push({ pathname: '/(book)/addStock', params: { id: booking.id } });
-  };
-
-  //Disapproved bookings
-  const handleDisapproved = () => {
-    router.push('/(book)/disapprovedBook');
-  };
-
-  //Closed bookings
-  const handleClosed = () => {
-    router.push('/(book)/closedBook');
   };
 
   const renderBooking = ({ item: booking }) => {
@@ -70,14 +55,12 @@ export default function Bookings() {
         <Text style={styles.field}>Room ID: {booking.roomId}</Text>
         <Text style={styles.field}>Start Time: {new Date(booking.sesion_Start).toLocaleString()}</Text>
         <Text style={styles.field}>Status: {booking.status}</Text>
+        <Text style={styles.field}>Status Reason:</Text>
+        <TextInput multiline numberOfLines={4} style={styles.textArea} value={booking.statusInfo}/>
 
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.actionButton} onPress={() => handleViewDetails(booking)}>
             <Text style={styles.buttonText}>View Details</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.actionButton} onPress={() => handleAddStock(booking)}>
-            <Text style={styles.buttonText}>Add Stock</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -94,14 +77,8 @@ export default function Bookings() {
         </TouchableOpacity>
 
         <View style={styles.statusButtons}>
-        <TouchableOpacity style={styles.statusButton} onPress={handleDisapproved}>
-          <Text style={styles.statusButtonText}>Disapproved</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.statusButton} onPress={handleClosed}>
-          <Text style={styles.statusButtonText}>Closed Bookings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.statusButton} onPress={() => router.replace('/home')}>
-          <Text style={styles.statusButtonText}>Back Home</Text>
+        <TouchableOpacity style={styles.statusButton} onPress={() => router.back()}>
+          <Text style={styles.statusButtonText}>  Back  </Text>
         </TouchableOpacity>
         </View>
       </View>
@@ -110,7 +87,7 @@ export default function Bookings() {
       {loading ? (
         <ActivityIndicator size="large" />
       ) : bookings.length === 0 ? (
-        <Text style={styles.noDataText}>No pending bookings found.</Text>
+        <Text style={styles.noDataText}>No disapproved bookings found.</Text>
       ) : (
         <FlatList
           data={bookings}
@@ -122,4 +99,3 @@ export default function Bookings() {
     </SafeAreaView>
   )
 }
-
