@@ -60,14 +60,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+
+
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
+
+    app.UseHttpsRedirection();
 app.UseRouting();
 app.UseStaticFiles();//Enables access to wwwroot
 app.UseAuthentication();

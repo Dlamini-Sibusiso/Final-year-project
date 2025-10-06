@@ -37,7 +37,7 @@ const RegisterSart = () => {
         if (name === "forgotpass")
         {   
             try{
-            const res = await axios.post("http://localhost:5289/api/Register/forgotpassword",
+            const res = await axios.post("http://localhost:2030/api/Register/forgotpassword",
                 { employeeNumber: parseInt(formData.Employee_Number)},
                 {
                     headers: {
@@ -53,7 +53,7 @@ const RegisterSart = () => {
             }
         }else {
             try {
-                const result = await axios.get(`http://localhost:5289/api/Staffs/GetStaffById/${formData.Employee_Number}`);        
+                const result = await axios.get(`http://localhost:2030/api/Staffs/GetStaffById/${formData.Employee_Number}`);        
                 setStaffInfo(result.data);
             
                 console.log('fetched staff:', staffInfo);

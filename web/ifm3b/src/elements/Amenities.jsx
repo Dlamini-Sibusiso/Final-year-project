@@ -16,7 +16,7 @@ const Amenities = () => {
     
     const fetchAmenities = async () => {
         try {
-            const res = await axios.get("http://localhost:5289/api/Amenities");
+            const res = await axios.get("http://localhost:2030/api/Amenities");
             setAmenities(res.data);
         } catch (err) {
             console.error(err);
@@ -37,7 +37,7 @@ const Amenities = () => {
         }
         
         try {
-            await axios.post("http://localhost:5289/api/Amenities", 
+            await axios.post("http://localhost:2030/api/Amenities", 
                 { 
                     amenitiesId: newAmen 
                 });
@@ -65,7 +65,7 @@ const Amenities = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:5289/api/Amenities/${id}`);
+            await axios.delete(`http://localhost:2030/api/Amenities/${id}`);
             
             setAmenities(prev => prev.filter(a => String(a.amenitiesId) !== String(id)));
             fetchAmenities();

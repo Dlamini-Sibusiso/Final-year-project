@@ -6,5 +6,7 @@
         public DateTime SesionEnd { get; set; }
         public int Capacity { get; set; }
         public required List<string> Amenities { get; set; }
+        //for employee to updating booking
+        public Guid? BookingGuidToExclude { get; set; }
     }
 }

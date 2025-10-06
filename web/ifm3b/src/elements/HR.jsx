@@ -26,7 +26,7 @@ const HR = () => {
     const fetchStaffs = async () => {
         try
         {
-            const resp = await axios.get("http://localhost:5289/api/Staffs");
+            const resp = await axios.get("http://localhost:2030/api/Staffs");
             setStaffs(resp.data);
         } 
         catch (err) 
@@ -50,7 +50,7 @@ const HR = () => {
         }
 
         try {//getting users with employee number
-            const response = await axios.get(`http://localhost:5289/api/Register/${regNum}`);
+            const response = await axios.get(`http://localhost:2030/api/Register/${regNum}`);
             setReg(response.data);
         } catch (err) {
             console.error(err);
@@ -79,7 +79,7 @@ const HR = () => {
 
         try
         {
-            await axios.delete(`http://localhost:5289/api/Register/${regNum}`);
+            await axios.delete(`http://localhost:2030/api/Register/${regNum}`);
         
             setRegNum('');
             setReg(null);
@@ -113,7 +113,7 @@ const HR = () => {
 
         try
         {
-            const res = await axios.post("http://localhost:5289/api/Staffs", {
+            const res = await axios.post("http://localhost:2030/api/Staffs", {
             employee_Number: en,
             role: role
             });
@@ -171,7 +171,7 @@ const HR = () => {
 
         try
         {
-            await axios.put(`http://localhost:5289/api/Staffs/${editStaff.employee_Number}`,
+            await axios.put(`http://localhost:2030/api/Staffs/${editStaff.employee_Number}`,
                 {
                     role: newRole,
                 }
@@ -194,7 +194,7 @@ const HR = () => {
 
         try
         {
-            await axios.delete(`http://localhost:5289/api/Staffs/${Enumber}`);
+            await axios.delete(`http://localhost:2030/api/Staffs/${Enumber}`);
             setStaffs(staffs.filter(s => s.employee_Number !== Enumber));   
         } catch (err) {
             console.error(err);

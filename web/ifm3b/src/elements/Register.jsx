@@ -38,7 +38,7 @@ const Register = () => {
         }
 
         try{
-            const res = await axios.post("http://localhost:5289/api/Register/register", formData) 
+            const res = await axios.post("http://localhost:2030/api/Register/register", formData) 
             setOkmsg({message: [res.data.message]})
 
         }catch(err){

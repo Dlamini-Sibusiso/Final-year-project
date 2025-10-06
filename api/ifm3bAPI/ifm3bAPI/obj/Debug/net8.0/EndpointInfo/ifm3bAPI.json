@@ -333,6 +333,101 @@
         }
       }
     },
+    "/api/Bookings/empUdateBooking/{id}": {
+      "put": {
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomSearchDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomSearchDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomSearchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bookings/roomAmenities/{roomId}": {
+      "get": {
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bookings/Updatesearchavailable": {
+      "post": {
+        "tags": [
+          "Bookings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomSearchDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomSearchDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomSearchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Register": {
       "get": {
         "tags": [
@@ -1446,6 +1541,11 @@
             "items": {
               "type": "string"
             },
+            "nullable": true
+          },
+          "bookingGuidToExclude": {
+            "type": "string",
+            "format": "uuid",
             "nullable": true
           }
         },

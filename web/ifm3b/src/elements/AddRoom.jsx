@@ -23,7 +23,7 @@ const AddRoom = () => {
     const [imageData, setImageData] = useState(null);
 
     useEffect (() => {
-        axios.get('http://localhost:5289/api/Amenities')
+        axios.get('http://localhost:2030/api/Amenities')
             .then(res => { 
                 console.log("Fetched amenities:", res.data);
                 setAmenList(res.data);
@@ -96,7 +96,7 @@ const AddRoom = () => {
         }
 
         try {
-            const result = await axios.post('http://localhost:5289/api/Rooms/create',
+            const result = await axios.post('http://localhost:2030/api/Rooms/create',
                 formData,
                 {
                     headers: {

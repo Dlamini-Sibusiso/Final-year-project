@@ -12,7 +12,7 @@ const RoomById = () => {
     const [room, setRoom] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:5289/api/Rooms/${id}`)
+        axios.get(`http://localhost:2030/api/Rooms/${id}`)
         .then(response => setRoom(response.data))
         .catch(err => console.error(err));
     }, [id]);
@@ -43,7 +43,7 @@ const RoomById = () => {
                             
                             <h4 className="d-flex justify-content-center align-items-center">Room Details</h4>
                                 <img
-                                    src={room.imageUrl ? `http://localhost:5289${room.imageUrl}` : DEFAULT_IMAGE}
+                                    src={room.imageUrl ? `http://localhost:2030${room.imageUrl}` : DEFAULT_IMAGE}
                                     className="card-img-top"
                                     alt="room.roomId"
                                     style={{ height: '200px', objectFit: 'cover'}}

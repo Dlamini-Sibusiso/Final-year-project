@@ -13,7 +13,7 @@ const Rooms = () => {
     useEffect(() => {
         const fetchRooms = async () => {
             try {
-                const result = await axios.get("http://localhost:5289/api/Rooms");
+                const result = await axios.get("http://localhost:2030/api/Rooms");
                 console.log(result)
                 setRooms(result.data)
             }catch (err) {
@@ -40,7 +40,7 @@ const Rooms = () => {
         console.log(typeof roomId, roomId);
 
         try {
-            const res = await axios.delete(`http://localhost:5289/api/Rooms/${roomId}`)
+            const res = await axios.delete(`http://localhost:2030/api/Rooms/${roomId}`)
                 console.log('successfully deleted:', res.data?.message);
                // alert(res.data?.message || 'Room deleted successfully.');
 
@@ -68,7 +68,7 @@ const Rooms = () => {
                                 <div className="card h-100 shadow-sm">
                                 
                                 <img
-                                    src={room.imageUrl ? `http://localhost:5289${room.imageUrl}` : DEFAULT_IMAGE}
+                                    src={room.imageUrl ? `http://localhost:2030${room.imageUrl}` : DEFAULT_IMAGE}
                                     className="card-img-top"
                                     alt="room.roomId"
                                     style={{ height: '200px', objectFit: 'cover'}}

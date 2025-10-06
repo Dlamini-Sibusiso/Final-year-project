@@ -17,7 +17,7 @@ const EditRoom = () => {
 
     // eslint-disable-nextline react-hooks/exhaustive-deps
     useEffect(() => {
-        axios.get(`http://localhost:5289/api/Rooms/${id}`)
+        axios.get(`http://localhost:2030/api/Rooms/${id}`)
             .then(response => {
             
                 const roomInfo = response.data;
@@ -28,7 +28,7 @@ const EditRoom = () => {
             })
             .catch(err => console.error(err));
         
-        axios.get('http://localhost:5289/api/Amenities')
+        axios.get('http://localhost:2030/api/Amenities')
             .then(res => setAllAmenities(res.data))
             .catch(err => console.error('Error fetching amenities', err));  
     }, [id]);
@@ -106,7 +106,7 @@ const EditRoom = () => {
         }
 
         try {
-            await axios.put(`http://localhost:5289/api/Rooms/${id}`, formData,
+            await axios.put(`http://localhost:2030/api/Rooms/${id}`, formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data' 
@@ -147,7 +147,7 @@ const EditRoom = () => {
                         <div className="col-md-4">
                             
                             <img
-                                src={room.imageUrl ? `http://localhost:5289${room.imageUrl}` : DEFAULT_IMAGE}
+                                src={room.imageUrl ? `http://localhost:2030${room.imageUrl}` : DEFAULT_IMAGE}
                                 className="card-img-top mb-2"
                                 alt="room.roomId"
                                 style={{ height: '200px', objectFit: 'cover'}}

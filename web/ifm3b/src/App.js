@@ -16,6 +16,8 @@ import EditRoom from "./elements/EditRoom";
 import AddRoom from "./elements/AddRoom";
 import History from "./elements/History";
 import EmpHistory from "./elements/EmpHistory";
+import UpcomingBookings from "./elements/UpcomingBookings";
+import EmpUpdateBooking from "./elements/EmpUpdateBooking";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import StatusUpdate from "./elements/StatusUpdate";
@@ -55,11 +57,14 @@ const showNav = !hideNavRoutes.includes(location.pathname);
           <Route path="/amenities" exact element = {<Amenities/>}/>
           <Route path="/hr" exact element = {<HR/>}/>
 
+          <Route path="/emphistory" exact element = {<EmpHistory/>}/>
+          <Route path="/upcomingbookings" exact element = {<UpcomingBookings/>}/>
+          <Route path="/empUpdateBooking/:id" element={<EmpUpdateBooking/>} />
+
           <Route path="/report" exact element = {<Report/>}/>
           <Route path="/profile" exact element = {<Profile/>}/>
           <Route path="/profileupdate" exact element = {<ProfileUpdate/>}/>
           <Route path="/history" exact element = {<History/>}/>
-          <Route path="/emphistory" exact element = {<EmpHistory/>}/>
           <Route path="/statusupdate" exact element = {<StatusUpdate/>}/>
         </Routes>
     </div>

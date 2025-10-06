@@ -111,6 +111,43 @@
   },
   {
     "ContainingType": "ifm3bAPI.Controllers.BookingsController",
+    "Method": "UpdateBooking",
+    "RelativePath": "api/Bookings/empUdateBooking/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedBooking",
+        "Type": "ifm3bAPI.Models.RoomSearchDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.BookingsController",
+    "Method": "GetRoomAmenities",
+    "RelativePath": "api/Bookings/roomAmenities/{roomId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roomId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.BookingsController",
     "Method": "SearchRoomsAvailable",
     "RelativePath": "api/Bookings/searchavailable",
     "HttpMethod": "POST",
@@ -189,6 +226,22 @@
       {
         "Name": "empNumber",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ifm3bAPI.Controllers.BookingsController",
+    "Method": "UpdateSearchRoomsAvailable",
+    "RelativePath": "api/Bookings/Updatesearchavailable",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roomSearchDto",
+        "Type": "ifm3bAPI.Models.RoomSearchDto",
         "IsRequired": true
       }
     ],
