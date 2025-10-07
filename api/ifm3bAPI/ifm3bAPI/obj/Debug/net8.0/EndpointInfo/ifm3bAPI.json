@@ -406,21 +406,110 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RoomSearchDto"
+                "$ref": "#/components/schemas/UpdateEmpBooking"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RoomSearchDto"
+                "$ref": "#/components/schemas/UpdateEmpBooking"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RoomSearchDto"
+                "$ref": "#/components/schemas/UpdateEmpBooking"
               }
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Department": {
+      "get": {
+        "tags": [
+          "Department"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Department"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepartmentDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepartmentDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepartmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Department/{id}": {
+      "delete": {
+        "tags": [
+          "Department"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -664,6 +753,42 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reports/MostUsedRooms": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reports/RoomUsageByDepartment": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reports/RoomAvailability": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -1490,6 +1615,19 @@
         },
         "additionalProperties": false
       },
+      "DepartmentDto": {
+        "required": [
+          "departmentId"
+        ],
+        "type": "object",
+        "properties": {
+          "departmentId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LoginDto": {
         "required": [
           "password",
@@ -1542,11 +1680,6 @@
               "type": "string"
             },
             "nullable": true
-          },
-          "bookingGuidToExclude": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1597,6 +1730,31 @@
           "stockReport": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateEmpBooking": {
+        "required": [
+          "roomId"
+        ],
+        "type": "object",
+        "properties": {
+          "bookingGuidToExclude": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomId": {
+            "type": "string",
+            "nullable": true
+          },
+          "sesionStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sesionEnd": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

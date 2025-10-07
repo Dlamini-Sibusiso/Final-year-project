@@ -16,7 +16,7 @@ const StockAmenities = () => {
     
     const fetchStocks = async () => {
         try {
-            const res = await axios.get('http://localhost:2030/api/Stocks');
+            const res = await axios.get('http://localhost:5289/api/Stocks');
             setStocks(res.data);
         } catch (err) {
             if (err.response && err.response.data)
@@ -40,7 +40,7 @@ const StockAmenities = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:2030/api/Stocks/${id}`);
+            await axios.delete(`http://localhost:5289/api/Stocks/${id}`);
             setStocks(stocks.filter(s => s.stockId !== id));
         } catch (err) {
             console.error(err);

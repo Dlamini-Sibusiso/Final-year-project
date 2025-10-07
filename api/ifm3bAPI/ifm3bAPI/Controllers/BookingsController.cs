@@ -349,131 +349,91 @@ namespace ifm3bAPI.Controllers
 
         //update room search
         [HttpPost("Updatesearchavailable")]
-        public IActionResult UpdateSearchRoomsAvailable([FromBody] RoomSearchDto roomSearchDto)
+        public IActionResult UpdateSearchRoomsAvailable([FromBody] UpdateEmpBooking updateEmpBooking)
         {
-            try { 
-            if (!ModelState.IsValid)
+            Console.WriteLine("===== Function Start here =====");
+            try
             {
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
-                return BadRequest(new { message = "Invalid input", errors });
-            }
-
-                Console.WriteLine("Incoming:", $"Start={roomSearchDto.SesionStart:O}, End={roomSearchDto.SesionEnd:O}, ExcludeId={roomSearchDto.BookingGuidToExclude}");
-
-                if (roomSearchDto.Amenities == null || roomSearchDto.Amenities.Count == 0)
-            {
-                return BadRequest(new { message = "Select at least one amenity" });
-            }
-
-            if (roomSearchDto.SesionEnd <= roomSearchDto.SesionStart)
-            {
-                return BadRequest(new { message = "End time must be after start time." });
-            }
-
-            Console.WriteLine("==== Room Search Triggered ====");
-            Console.WriteLine($"Start: {roomSearchDto.SesionStart}");
-            Console.WriteLine($"End: {roomSearchDto.SesionEnd}");
-            Console.WriteLine($"Capacity: {roomSearchDto.Capacity}");
-            Console.WriteLine($"Exclude Booking ID: {roomSearchDto.BookingGuidToExclude}");
-            Console.WriteLine("Amenities: " + string.Join(", ", roomSearchDto.Amenities));
-
-                /*var roomfetched = dbContext.Rooms.Where(rm => rm.Capacity >= roomSearchDto.Capacity)//fetch all rooms meeting capacity
-                    .AsEnumerable() //move to in-memory to allow string split
-                    .Where(rm => {
-                        var roomAmen = rm.Amenities?
-                            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                            .Select(a => a.Trim().ToLower())
-                            .ToList() ?? new List<string>();
-                        */
-                /*                var potentialConflicts = dbContext.Bookings
-                .Where(b => b.RoomId == rm.RoomId && b.Status != "Close")
-                .ToList();
-
-                                foreach (var b in potentialConflicts)
-                                {
-                                    Console.WriteLine($"Check Booking ID: {b.Id}, Start: {b.Sesion_Start:O}, End: {b.Sesion_End:O}");
-                                }
-            */
-
-                var allBookings = dbContext.Bookings
-    .Where(b => b.Status != "Close")
-    .ToList();
-
-                foreach (var b in allBookings)
+                if (updateEmpBooking.SesionEnd <= updateEmpBooking.SesionStart)
                 {
-                    Console.WriteLine($"Existing booking: Id={b.Id}, RoomId={b.RoomId}, Start={b.Sesion_Start:O}, End={b.Sesion_End:O}");
+                    return BadRequest(new { message = "End time must be after start time." });
                 }
 
-                //Normalize incoming search amenities
-                var requiredAmen = roomSearchDto.Amenities
-                        .Select(a => a.Trim().ToLower())
-                        .ToList();
-
-                var sessionStart = roomSearchDto.SesionStart;
-                var sessionEnd = roomSearchDto.SesionEnd;
-                var excludeId = roomSearchDto.BookingGuidToExclude;
-
-                // Query all rooms with capacity filter only
-                var candidateRooms = dbContext.Rooms
-                    .Where(r => r.Capacity >= roomSearchDto.Capacity)
-                    .ToList();
-
-                //Get all conflicting bookings & temp bookings
-                var conflictingRoomIds = dbContext.Bookings
-                    .Where(b => b.Status != "Close" &&
-                                (!excludeId.HasValue || b.Id != excludeId) &&
-                                sessionStart < b.Sesion_End &&
-                                sessionEnd > b.Sesion_Start)
-                    .Select(b => b.RoomId.Trim())
-                    .Union(
-                        dbContext.BookingTemps
-                            .Where(t => sessionStart < t.Sesion_End &&
-                                        sessionEnd > t.Sesion_Start)
-                            .Select(t => t.RoomId.Trim().ToLower())
-                    )
-                    .Distinct()
-                    .ToList();
-
-                //Filter based on amenities
-                var filteredRooms = candidateRooms
-                    .Where(r =>
-                    {
-                        var roomAmenities = (r.Amenities ?? "")
-                            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                            .Select(a => a.Trim().ToLower())
-                            .ToList();
-
-                        
-                        return requiredAmen.All(req => roomAmenities.Contains(req))
-                        && !conflictingRoomIds.Contains(r.RoomId); //overlaping filter
-
-                    })
-                    .ToList();
-
-                //Remove conflicting rooms
-                var availableRooms = filteredRooms
-            .Where(r => !conflictingRoomIds.Contains(r.RoomId.Trim().ToLower()))
-            .ToList();
-
-                foreach (var room in availableRooms)
+                //Check if room exists and is available
+                var room = dbContext.Rooms.FirstOrDefault(r => r.RoomId == updateEmpBooking.RoomId);
+                if (room == null)
                 {
-                    Console.WriteLine($"Available Room: {room.RoomId}");
+                    return NotFound(new { message = "Room not found." });
                 }
 
-                Console.WriteLine($"Available rooms: {availableRooms.Count}");
-            return Ok(availableRooms);
+                if (room.Status != "Available")
+                {
+                    return BadRequest(new { message = "Room is currently not available." });
+                }
 
-        }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Exception in Updatesearchavailable: " + ex.ToString());
-        return StatusCode(500, new { message = "Internal server error", detail = ex.Message
-    });
-    }
+                //Check for time overlap in Bookings (excluding current booking)
+                var hasBookingConflict = dbContext.Bookings.Where(b =>
+                    b.RoomId == updateEmpBooking.RoomId &&
+                    b.Status != "Close" &&
+                    b.Id != updateEmpBooking.BookingGuidToExclude &&
+                    updateEmpBooking.SesionStart < b.Sesion_End &&
+                   updateEmpBooking.SesionEnd > b.Sesion_Start
+                ).ToList();
+
+                foreach (var b in hasBookingConflict)
+                {
+                    Console.WriteLine($"Conflict in Booking: Id={b.Id}, Start={b.Sesion_Start:O}, End={b.Sesion_End:O}");
+                }
+
+                //Check for time overlap in BookingTemps
+                var hasTempConflict = dbContext.BookingTemps.Where(t =>
+                    t.RoomId == updateEmpBooking.RoomId &&
+                    updateEmpBooking.SesionStart < t.Sesion_End &&
+                    updateEmpBooking.SesionEnd > t.Sesion_Start
+                ).ToList();
+
+                foreach (var t in hasTempConflict)
+                {
+                    Console.WriteLine($"Conflict in BookingTemp: Start={t.Sesion_Start:O}, End={t.Sesion_End:O}");
+                }
+
+                if (hasBookingConflict.Any() || hasTempConflict.Any())
+                {
+                    return Conflict(new { message = "Room is already booked during the selected time." });
+                }
+
+                Console.WriteLine("=== Overlap Check Input ===");
+                Console.WriteLine($"Exclude Booking: {updateEmpBooking.BookingGuidToExclude}");
+                Console.WriteLine($"Requested RoomId: {updateEmpBooking.RoomId}");
+                Console.WriteLine($"Requested Start: {updateEmpBooking.SesionStart:O}");
+                Console.WriteLine($"Requested End: {updateEmpBooking.SesionEnd:O}");
+
+                var conflictingConfirmed = dbContext.Bookings
+                    .Where(b => b.RoomId == updateEmpBooking.RoomId && b.Status != "Close" && b.Id != updateEmpBooking.BookingGuidToExclude)
+                    .ToList();
+
+                foreach (var b in conflictingConfirmed)
+                {
+                    Console.WriteLine($"Existing Booking: Id={b.Id}, Start={b.Sesion_Start:O}, End={b.Sesion_End:O}");
+                }
+
+                var conflictingTemps = dbContext.BookingTemps
+                    .Where(t => t.RoomId == updateEmpBooking.RoomId)
+                    .ToList();
+
+                foreach (var t in conflictingTemps)
+                {
+                    Console.WriteLine($"Existing Temp: Start={t.Sesion_Start:O}, End={t.Sesion_End:O}");
+                }
+
+                //Everything is fine
+                return Ok(new { message = "Room is available for update." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in CheckRoomAvailabilityForUpdate: " + ex);
+                return StatusCode(500, new { message = "Internal server error", detail = ex.Message });
+            }
         }
     }
 }

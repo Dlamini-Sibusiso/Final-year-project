@@ -286,7 +286,7 @@ const BookRoom = () => {
                                         <div className="card h-100 shadow-sm">
                                         
                                         <img
-                                            src={rm.imageUrl ? `http://localhost:2030${rm.imageUrl}` : DEFAULT_IMAGE}
+                                            src={rm.imageUrl ? `http://localhost:5289${rm.imageUrl}` : DEFAULT_IMAGE}
                                             className="card-img-top"
                                             alt="rm.roomId"
                                             style={{ height: '200px', objectFit: 'cover'}}

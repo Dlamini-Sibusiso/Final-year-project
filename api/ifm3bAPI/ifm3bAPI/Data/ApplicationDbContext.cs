@@ -16,6 +16,7 @@ namespace ifm3bAPI.Data
         public DbSet <BookingTemp> BookingTemps { get; set; }
 
         public DbSet<TempStockSelection> TempStockSelections { get; set; }
-        
+
+        public DbSet<Department> Departments { get; set; }
     }
 }

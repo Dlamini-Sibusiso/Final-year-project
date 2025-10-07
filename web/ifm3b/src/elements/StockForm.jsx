@@ -60,11 +60,11 @@ const StockForm = ({stock, onSaved, onCancel}) => {
         try {
             if (stock) {
                 //update
-                await axios.put(`http://localhost:2030/api/Stocks/${formData.stockId}`, formData);
+                await axios.put(`http://localhost:5289/api/Stocks/${formData.stockId}`, formData);
                 alert('Updated successfully');
             } else {
                 //add
-                await axios.post("http://localhost:2030/api/Stocks", formData);
+                await axios.post("http://localhost:5289/api/Stocks", formData);
                 alert('Add successfully');
             }
             

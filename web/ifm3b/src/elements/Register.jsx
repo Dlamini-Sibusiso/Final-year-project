@@ -1,7 +1,7 @@
 import React from "react";
 //import axios from "axios";
 import { Link, useLocation } from "react-router-dom"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const Register = () => {
@@ -20,6 +20,16 @@ const Register = () => {
     });
     const [errors, setErrors] = useState({});
     const [okmsg, setOkmsg] = useState({});
+    const [allDepartments, setAllDepartments] = useState([]);
+
+    useEffect(() => {
+            axios.get('http://localhost:5289/api/Department')
+            .then(res => {
+                console.log("Fetched departments:", res.data);
+                setAllDepartments(res.data)
+            })
+            .catch(err => console.error('Error fetching departments', err));
+        },[]);
 
     const handleChange = (e) => {
         setFormData((prev) => ({...prev, [e.target.name]: e.target.value}))
@@ -37,24 +47,28 @@ const Register = () => {
             return;
         }
 
+        console.log('Submitting data:', formData);
+
         try{
-            const res = await axios.post("http://localhost:2030/api/Register/register", formData) 
+            const res = await axios.post("http://localhost:5289/api/Register/register", formData) 
             setOkmsg({message: [res.data.message]})
 
         }catch(err){
-            console.error(err.message)
-
+            console.error(err.message);
+            console.error('Error data ', err.response?.data);
             if (err.response?.status === 400 || err.response?.status === 409)
             {
                 const errorData = err.response.data;
 
                 if (Array.isArray(errorData.message))
                 {
-                    setErrors({message: errorData.respond.data})
+                    setErrors({message: errorData.message})
                 }else if (typeof errorData.message === "string"){
                     setErrors({message: [errorData.message] });
                 }else if (errorData.errors) {
-                    setErrors({modMsg: errorData.errors});//Modelstate errors    
+                   // setErrors({modMsg: errorData.errors});//Modelstate errors    
+                const flattenedErrors = Object.values(errorData.errors).flat();
+      setErrors({ modMsg: flattenedErrors });
                 }
 
             } else {
@@ -99,13 +113,29 @@ const Register = () => {
                 <h1 style={{textAlign:'center'}}>Register/ Sign Up</h1>
                 <form onSubmit={handleClick}>
                     <label htmlFor="password">Password:</label>
-                    <input type="text" autoComplete="off" placeholder="Enter password" className="form-control rounded-0 mb-3" onChange={handleChange} name="Password" required/>
+                    <input type="password" autoComplete="off" placeholder="Enter password" className="form-control rounded-0 mb-3" onChange={handleChange} name="Password" required/>
                     
                     <label htmlFor="username">Username:</label>
                     <input type="text" autoComplete="off" placeholder="Enter username" className="form-control rounded-0 mb-3" onChange={handleChange} name="Username" required/>
-                    
+                    {/*
                     <label htmlFor="department">Department:</label>
                     <input type="text" autoComplete="off" placeholder="Enter department" className="form-control rounded-0 mb-3" onChange={handleChange} name="Department" required/>
+*/}
+                    <label htmlFor="department">Department:</label>
+                    <select
+                    className="form-control rounded-0 mb-3"
+                    name="Department"
+                    onChange={handleChange}
+                    required
+                    >
+                    <option value="">-- Select Department --</option>
+                    {allDepartments.map((dept, index) => (
+                        <option key={index} value={dept}>
+                        {dept}
+                        </option>
+                    ))}
+                    </select>
+
 
                     <label htmlFor="Phone number">Phone Number:</label>
                     <input type="number" autoComplete="off" placeholder="Enter phone number" className="form-control rounded-0 mb-3" onChange={handleChange} name="Phone_Number" required/>

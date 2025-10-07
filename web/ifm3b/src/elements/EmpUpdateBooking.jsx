@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const UpdateBooking = () => {
@@ -72,14 +72,16 @@ const [capacityErr, setCapacityErr] = useState("");
     console.log("BookingGuidToExclude being sent:", id);
     const start = form.sesion_Start;
         const end = form.sesion_End;
-
+console.log('Start time', toLocalIOString(start));
+console.log('End time',toLocalIOString(start));
     try {
       const res = await axios.post("http://localhost:5289/api/Bookings/Updatesearchavailable", {
-        SesionStart: toLocalIOString(start),
-        SesionEnd: toLocalIOString(end),
-        Capacity: parseInt(form.capacity),
-        Amenities: form.amenities,
         BookingGuidToExclude: id,
+        RoomId: booking.roomId,
+        SesionStart: toLocalIOString(start),//new Date(start).toISOString(),
+        SesionEnd: toLocalIOString(end),//new Date(end).toISOString(),
+        //capacity: parseInt(form.capacity),
+        //amenities: form.amenities,
       });
       console.log('Updating validation', res.data)
       return res.data.length > 0;
@@ -98,17 +100,19 @@ const [capacityErr, setCapacityErr] = useState("");
     //console.log("Submitting form:", form); 
     setCapacityErr("");
 
-    const isValid = await validateBeforeUpdate();
+    /*const isValid = await validateBeforeUpdate();
     if (!isValid)
     {
         return;
-    }
+    }*/
+    const start = form.sesion_Start;
+        const end = form.sesion_End;
 
     try {
       await axios.put(`http://localhost:5289/api/Bookings/empUdateBooking/${id}`, 
         {
-              SesionStart: form.sesion_Start,
-              SesionEnd: form.sesion_End,
+              SesionStart: toLocalIOString(start),//form.sesion_Start,
+              SesionEnd: toLocalIOString(end),//form.sesion_End,
         capacity: parseInt(form.capacity),
         amenities: form.amenities, 
       });
