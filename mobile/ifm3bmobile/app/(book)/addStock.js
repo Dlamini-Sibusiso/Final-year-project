@@ -180,7 +180,7 @@ export default function AddStock() {
         <Text style={styles.buttonText}>Add to Selection</Text>
       </TouchableOpacity>
 
-      <Text style={styles.subHeader}>Current Selections:</Text>
+     {/**Beta  <Text style={styles.subHeader}>Current Selections:</Text> Beta**/}
       <FlatList
         data={staging}
         keyExtractor={(item) => item.stagingId.toString() ?? `${item.stockId}-${item.quantity}`}
@@ -191,7 +191,7 @@ export default function AddStock() {
           </View>
           )
         }
-        ListEmptyComponent={<Text style={styles.emptyText}>No stock selected.</Text>}
+       ListEmptyComponent={<Text style={styles.emptyText}>  </Text>} 
       />
 
       <View style={styles.footer}>

@@ -55,7 +55,7 @@ namespace ifm3bAPI.Controllers
                 var availableRooms = roomfetched
                     .Where(rm => 
                         !dbContext.Bookings.Any(b => b.RoomId == rm.RoomId &&
-                            b.Status != "Close" && //Available rooms not included
+                            b.Status != "Closed" && //Available rooms not included
                             !(roomSearchDto.SesionEnd <= b.Sesion_Start || roomSearchDto.SesionStart >= b.Sesion_End)
                         ) &&
                         !dbContext.BookingTemps.Any(bTemp => bTemp.RoomId == rm.RoomId &&
@@ -351,7 +351,6 @@ namespace ifm3bAPI.Controllers
         [HttpPost("Updatesearchavailable")]
         public IActionResult UpdateSearchRoomsAvailable([FromBody] UpdateEmpBooking updateEmpBooking)
         {
-            Console.WriteLine("===== Function Start here =====");
             try
             {
                 if (updateEmpBooking.SesionEnd <= updateEmpBooking.SesionStart)
@@ -374,7 +373,7 @@ namespace ifm3bAPI.Controllers
                 //Check for time overlap in Bookings (excluding current booking)
                 var hasBookingConflict = dbContext.Bookings.Where(b =>
                     b.RoomId == updateEmpBooking.RoomId &&
-                    b.Status != "Close" &&
+                    b.Status != "Closed" &&
                     b.Id != updateEmpBooking.BookingGuidToExclude &&
                     updateEmpBooking.SesionStart < b.Sesion_End &&
                    updateEmpBooking.SesionEnd > b.Sesion_Start

@@ -31,7 +31,7 @@ const Login = () => {
         console.log("Sending data:", logginData);
 
         try {
-            const response = await axios.post('http://10.0.2.2:2030/api/Register/login', 
+            const response = await axios.post('http://10.0.2.2:5289/api/Register/login', 
                 { Username: logginData.Username, Password: logginData.Password,},
                 {
                     headers: {
@@ -85,7 +85,7 @@ const Login = () => {
                                     {loading ? 'signing in...' : 'Sign in'}
                                 </Text>
                             </TouchableOpacity>
-                            <Text style={styles.label}>Don't have an account? <Text style={styles.labelLink} onPress={() => Handlepress("signingup")}> Sign Up</Text> Or <Text style={styles.labelLink} onPress={() => Handlepress("forgotpass")}> Forgot password</Text></Text>
+                           {/**Beta <Text style={styles.label}>Don't have an account? <Text style={styles.labelLink} onPress={() => Handlepress("signingup")}> Sign Up</Text> Or <Text style={styles.labelLink} onPress={() => Handlepress("forgotpass")}> Forgot password</Text></Text> Beta**/}
                         </View>                      
                     </ImageBackground>
             </ScrollView>

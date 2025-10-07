@@ -67,7 +67,7 @@ export default function statusUpdate() {
         Status: newStatus, 
       });
             
-      Alert.alert('Success', 'Status updated successfully.');
+     // Alert.alert('Success', 'Status updated successfully.');
       fetchBookings(); // Refresh booking info
     } catch (err) {
       console.error('Error updating status:', err);

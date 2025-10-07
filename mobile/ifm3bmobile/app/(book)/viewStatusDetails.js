@@ -62,7 +62,7 @@ const viewStatusDetails = () => {
                     Status: selectedStatus, 
                 });
             
-            Alert.alert('Success', 'Status updated successfully.');
+            //Alert.alert('Success', 'Status updated successfully.');
             fetchBooking(); // Refresh booking info
         } catch (err) {
             console.error('Error updating status:', err);
