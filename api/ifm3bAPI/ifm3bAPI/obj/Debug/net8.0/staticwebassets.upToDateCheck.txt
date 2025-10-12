@@ -11,3 +11,4 @@ wwwroot\uploads\140dd802-b6f7-4900-9606-f302f8474f63.png
 wwwroot\uploads\68f2df3e-728c-4793-b124-325edfdbbcc7.png
 wwwroot\uploads\6f903b67-08a4-4590-80db-0146d3ac4da8.png
 wwwroot\uploads\4b414d9e-0353-4ebc-a42a-bbf1ea280464.png
+wwwroot\uploads\110666d3-c020-42b5-9218-a168c043edd6.png

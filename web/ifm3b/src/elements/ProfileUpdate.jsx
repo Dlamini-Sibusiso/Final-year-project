@@ -77,6 +77,12 @@ fetchProfile();
   };
 
   return (
+    <div>
+      {!isLoggedIn && (
+            <h1 className="alert alert-warning">"You are not logged in."</h1>
+        )}
+
+        {isLoggedIn && (
     <div className="container mt-5">
       <div className="card shadow p-4">
         <h2 className="mb-4">Edit Profile</h2>
@@ -134,6 +140,8 @@ fetchProfile();
           </div>
         </form>
       </div>
+    </div>
+        )}
     </div>
   );
 }

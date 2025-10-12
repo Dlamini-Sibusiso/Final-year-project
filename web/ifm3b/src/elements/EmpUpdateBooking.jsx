@@ -1,8 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 const UpdateBooking = () => {
+  const { isLoggedIn } = useAuth();
   const { id } = useParams(); // booking ID from route
   const navigate = useNavigate();
   const [booking, setBooking] = useState(null);
@@ -13,17 +15,16 @@ const UpdateBooking = () => {
     amenities: [],
   });
 
-const [allAmenities, setAllAmenities] = useState([]);
-const [capacityErr, setCapacityErr] = useState("");
+  const [allAmenities, setAllAmenities] = useState([]);
+  const [capacityErr, setCapacityErr] = useState("");
   const [validationError, setValidationError] = useState("");
 
-// Load amenities
+  // Load amenities
   useEffect(() => {
-    const fetchAmenities = async () => {
-      
-        try{
+    const fetchAmenities = async () => { 
+      try{
         const response = await axios.get(`http://localhost:5289/api/Bookings/roomAmenities/${booking.roomId}`);
-      setAllAmenities(response.data);
+        setAllAmenities(response.data);
       
       } catch (error) {
         console.error("Error loading amenities:", error);
@@ -71,9 +72,10 @@ const [capacityErr, setCapacityErr] = useState("");
   const validateBeforeUpdate = async () => {
     console.log("BookingGuidToExclude being sent:", id);
     const start = form.sesion_Start;
-        const end = form.sesion_End;
-console.log('Start time', toLocalIOString(start));
-console.log('End time',toLocalIOString(start));
+    const end = form.sesion_End;
+    console.log('Start time', toLocalIOString(start));
+    console.log('End time',toLocalIOString(start));
+    
     try {
       const res = await axios.post("http://localhost:5289/api/Bookings/Updatesearchavailable", {
         BookingGuidToExclude: id,
@@ -106,15 +108,15 @@ console.log('End time',toLocalIOString(start));
         return;
     }*/
     const start = form.sesion_Start;
-        const end = form.sesion_End;
+    const end = form.sesion_End;
 
     try {
       await axios.put(`http://localhost:5289/api/Bookings/empUdateBooking/${id}`, 
         {
-              SesionStart: toLocalIOString(start),//form.sesion_Start,
-              SesionEnd: toLocalIOString(end),//form.sesion_End,
-        capacity: parseInt(form.capacity),
-        amenities: form.amenities, 
+          SesionStart: toLocalIOString(start),//form.sesion_Start,
+          SesionEnd: toLocalIOString(end),//form.sesion_End,
+          capacity: parseInt(form.capacity),
+          amenities: form.amenities, 
       });
 
       alert("Booking updated successfully");
@@ -129,77 +131,83 @@ console.log('End time',toLocalIOString(start));
   if (!booking) return <div className="container mt-4">Loading booking...</div>;
 
   return (
-    <div className="container mt-4">
-      <h2>Update Booking</h2>
-        {validationError && <div className="alert alert-danger">{validationError}</div>}
-        {capacityErr && <div className="alert alert-danger">{capacityErr}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Session Start</label>
-          <input
-            min={new Date().toISOString().slice(0,16)}
-            type="datetime-local"
-            name="sesion_Start"
-            className="form-control"
-            value={form.sesion_Start}
-            onChange={handleChange}
-          />
-        </div>
+    <div>
+      {!isLoggedIn && (
+            <h1 className="alert alert-warning">"You are not logged in."</h1>
+        )}
 
-        <div className="mb-3">
-          <label>Session End</label>
-          <input
-            min={form.sesion_Start}
-            type="datetime-local"
-            name="sesion_End"
-            className="form-control"
-            value={form.sesion_End}
-            onChange={handleChange}
-          />
-        </div>
+        {isLoggedIn && (
+          <div className="container mt-4">
+            <h2>Update Booking</h2>
+            {validationError && <div className="alert alert-danger">{validationError}</div>}
+            {capacityErr && <div className="alert alert-danger">{capacityErr}</div>}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label>Session Start</label>
+                <input
+                  min={new Date().toISOString().slice(0,16)}
+                  type="datetime-local"
+                  name="sesion_Start"
+                  className="form-control"
+                  value={form.sesion_Start}
+                  onChange={handleChange}
+                />
+              </div>
 
-        <div className="mb-3">
-          <label>Capacity</label>
-          <input
-            type="number"
-            name="capacity"
-            className="form-control"
-            value={form.capacity}
-            onChange={handleChange}
-          />
-        </div>
+              <div className="mb-3">
+                <label>Session End</label>
+                <input
+                  min={form.sesion_Start}
+                  type="datetime-local"
+                  name="sesion_End"
+                  className="form-control"
+                  value={form.sesion_End}
+                  onChange={handleChange}
+                />
+              </div>
 
-       <div className="mb-3">
-  <label className="form-label">Select Amenities</label>
-  <div className="form-check">
-    {allAmenities.map((amenity, index) => (
-      <div key={index} className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          id={`amenity-${index}`}
-          value={amenity}
-          checked={form.amenities.includes(amenity)}
-          onChange={(e) => {
-            const selected = form.amenities.includes(amenity)
-              ? form.amenities.filter((a) => a !== amenity) // remove if unchecked
-              : [...form.amenities, amenity]; // add if checked
-            setForm((prev) => ({ ...prev, amenities: selected }));
-          }}
-        />
-        <label className="form-check-label" htmlFor={`amenity-${index}`}>
-          {amenity}
-        </label>
+              <div className="mb-3">
+                <label>Capacity</label>
+                <input
+                  type="number"
+                  name="capacity"
+                  className="form-control"
+                  value={form.capacity}
+                  onChange={handleChange}
+                />
+              </div>
+
+            <div className="mb-3">
+            <label className="form-label">Select Amenities</label>
+            <div className="form-check">
+            {allAmenities.map((amenity, index) => (
+              <div key={index} className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id={`amenity-${index}`}
+                  value={amenity}
+                  checked={form.amenities.includes(amenity)}
+                  onChange={(e) => {
+                    const selected = form.amenities.includes(amenity)
+                      ? form.amenities.filter((a) => a !== amenity) // remove if unchecked
+                      : [...form.amenities, amenity]; // add if checked
+                    setForm((prev) => ({ ...prev, amenities: selected }));
+                  }}
+                />
+                <label className="form-check-label" htmlFor={`amenity-${index}`}>
+              {amenity}
+            </label>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-</div>
-
-
-        <button type="submit" className="btn btn-success">
-          Save Changes
-        </button>
-      </form>
+          </div>
+          <button type="submit" className="btn btn-success">
+            Save Changes
+          </button>
+        </form>
+      </div>
+      )}
     </div>
   );
 };

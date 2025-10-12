@@ -33,45 +33,53 @@ const UpcomingBookings = () => {
     };
 
   return (
-    <div className="container mt-4">
-      <h2>Upcoming Bookings (Pending / Disapprove)</h2>
+    <div>
+      {!isLoggedIn && (
+        <h1 className="alert alert-warning">"You are not logged in."</h1>
+      )}
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : bookings.length === 0 ? (
-        <p>No upcoming bookings found.</p>
-      ) : (
-        <table className="table table-bordered">
-          <thead className="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>Room ID</th>
-              <th>Session Start</th>
-              <th>Session End</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking.id}>
-                <td>{booking.id}</td>
-                <td>{booking.roomId}</td>
-                <td>{new Date(booking.sesion_Start).toLocaleString()}</td>
-                <td>{new Date(booking.sesion_End).toLocaleString()}</td>
-                <td>{booking.status}</td>
-                <td>
-                  <button
-                    className="btn btn-success btn-sm me-2"
-                    onClick={() => handleUpdateBooking (booking.id)}
-                  >
-                    Update booking
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {isLoggedIn && (
+        <div className="container mt-4">
+          <h2>Upcoming Bookings (Pending / Disapprove)</h2>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : bookings.length === 0 ? (
+            <p>No upcoming bookings found.</p>
+          ) : (
+            <table className="table table-bordered">
+              <thead className="thead-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Room ID</th>
+                  <th>Session Start</th>
+                  <th>Session End</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings.map((booking) => (
+                  <tr key={booking.id}>
+                    <td>{booking.id}</td>
+                    <td>{booking.roomId}</td>
+                    <td>{new Date(booking.sesion_Start).toLocaleString()}</td>
+                    <td>{new Date(booking.sesion_End).toLocaleString()}</td>
+                    <td>{booking.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-success btn-sm me-2"
+                        onClick={() => handleUpdateBooking (booking.id)}
+                      >
+                        Update booking
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       )}
     </div>
   );

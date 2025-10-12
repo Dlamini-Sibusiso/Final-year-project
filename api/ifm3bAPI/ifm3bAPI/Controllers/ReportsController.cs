@@ -1,4 +1,5 @@
 ﻿using ifm3bAPI.Data;
+using ifm3bAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,44 +17,71 @@ namespace ifm3bAPI.Controllers
             this.dbContext = dbContext;
         }
 
-        //most used rooms
-        [HttpGet("MostUsedRooms")]
-        public async Task<IActionResult> GetMostUsedRooms()
+        [HttpGet("dashboard")]
+        public async Task<ActionResult<DashboardReportDto>> GetDashboardReport()
         {
-            var result = await dbContext.Bookings
+            var now = DateTime.UtcNow;
+            var todayStart = now.Date;
+            var todayEnd = todayStart.AddDays(1);
+
+            // Basic counts
+            var totalRooms = await dbContext.Rooms.CountAsync();
+            var activeRooms = await dbContext.Rooms.CountAsync(r => r.Status == "Available");
+            var maintenanceRooms = await dbContext.Rooms.CountAsync(r => r.Status == "Unavailable");
+
+            var todaysBookingsCount = await dbContext.Bookings.CountAsync(b =>
+                b.Sesion_Start >= todayStart && b.Sesion_Start < todayEnd);
+
+            var newBookingsCount = await dbContext.Bookings.CountAsync(b => b.Status == "Pending");
+
+            // Upcoming bookings (next 90 days)
+            var upcomingBookings = await dbContext.Bookings
+                .Where(b => b.Sesion_Start >= now && b.Sesion_Start <= now.AddDays(90))
+                .OrderBy(b => b.Sesion_Start)
+                .Select(b => new BookingEventDto(
+                    b.BookingId,
+                    $"Room: {b.RoomId} ({b.Capacity})",
+                    b.Sesion_Start,
+                    b.Sesion_End,
+                    b.RoomId))
+                .ToListAsync();
+
+            // Most used rooms by number of bookings (top 5)
+            var mostUsedRooms = await dbContext.Bookings
                 .GroupBy(b => b.RoomId)
-                .Select(g => new { RoomId = g.Key, UsageCount = g.Count() })
-                .OrderByDescending(g => g.UsageCount)
+                .Select(g => new { RoomId = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
+                .Join(dbContext.Rooms, b => b.RoomId, r => r.RoomId,
+                    (b, r) => new RoomUsageDto(r.RoomId, r.Description, r.Capacity, b.Count))
                 .ToListAsync();
 
-            return Ok(result);
-        }
-
-        //usage of rooms by departments
-        [HttpGet("RoomUsageByDepartment")]
-        public async Task<IActionResult> GetRoomUsageByDepartment()
-        {
-            var result = await dbContext.Bookings
-                .GroupBy(b => new { b.RoomId, b.Employee_Number })
-                .Select(g => new
-                {
-                    g.Key.RoomId,
-                    g.Key.Employee_Number,
-                    UsageCount = g.Count()
-                })
+            // Most requested capacities (group bookings by requested capacity)
+            var capacityGroups = await dbContext.Bookings
+                .GroupBy(b => b.Capacity)
+                .Select(g => new { Capacity = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count)
+                .Take(5)
                 .ToListAsync();
 
-            return Ok(result);
-        }
+            // map to DTO after query runs
+            var capacityStats = capacityGroups
+                .Select(x => new CapacityStatDto(x.Capacity, x.Count))
+                .ToList();
 
-        //room availability
-        [HttpGet("RoomAvailability")]
-        public async Task<IActionResult> GetRoomAvailability()
-        {
-            var available = await dbContext.Rooms.CountAsync(r => r.Status == "Available");
-            var unavailable = await dbContext.Rooms.CountAsync(r => r.Status != "Available");
+            var report = new DashboardReportDto
+            {
+                TotalRooms = totalRooms,
+                ActiveRooms = activeRooms,
+                MaintenanceRooms = maintenanceRooms,
+                TodaysBookingsCount = todaysBookingsCount,
+                NewBookingsCount = newBookingsCount,
+                UpcomingBookings = upcomingBookings,
+                MostUsedRooms = mostUsedRooms,
+                MostRequestedCapacities = capacityStats
+            };
 
-            return Ok(new { Available = available, Unavailable = unavailable });
+            return Ok(report);
         }
     }
 }

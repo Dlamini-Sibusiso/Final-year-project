@@ -443,33 +443,23 @@
   },
   {
     "ContainingType": "ifm3bAPI.Controllers.ReportsController",
-    "Method": "GetMostUsedRooms",
-    "RelativePath": "api/Reports/MostUsedRooms",
+    "Method": "GetDashboardReport",
+    "RelativePath": "api/Reports/dashboard",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ifm3bAPI.Controllers.ReportsController",
-    "Method": "GetRoomAvailability",
-    "RelativePath": "api/Reports/RoomAvailability",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ifm3bAPI.Controllers.ReportsController",
-    "Method": "GetRoomUsageByDepartment",
-    "RelativePath": "api/Reports/RoomUsageByDepartment",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "ifm3bAPI.Models.DashboardReportDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "ifm3bAPI.Controllers.RoomsController",

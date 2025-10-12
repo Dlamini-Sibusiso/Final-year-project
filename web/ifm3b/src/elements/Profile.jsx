@@ -25,21 +25,29 @@ const Profile = () => {
   if (!user) return <div className="text-center mt-5">Loading profile...</div>;
 
   return (
-    <div className="container mt-5">
-      <div className="card shadow p-4">
-        <h2 className="mb-4">My Profile</h2>
-        <div className="mb-3"><strong>Name:</strong> {user.username} {user.LastName}</div>
-        <div className="mb-3"><strong>Email:</strong> {user.email}</div>
-        <div className="mb-3"><strong>Phone:</strong> {user.phone_Number}</div>
-        <div className="mb-3"><strong>Department:</strong> {user.department}</div>
+    <div>
+      {!isLoggedIn && (
+            <h1 className="alert alert-warning">"You are not logged in."</h1>
+        )}
 
-        <button
-          className="btn btn-primary"
-          onClick={() => navigate(`/profileupdate/${user.Id}`)}
-        >
-          Edit Profile
-        </button>
-      </div>
+        {isLoggedIn && (
+          <div className="container mt-5">
+            <div className="card shadow p-4">
+              <h2 className="mb-4">My Profile</h2>
+              <div className="mb-3"><strong>Name:</strong> {user.username} {user.LastName}</div>
+              <div className="mb-3"><strong>Email:</strong> {user.email}</div>
+              <div className="mb-3"><strong>Phone:</strong> {user.phone_Number}</div>
+              <div className="mb-3"><strong>Department:</strong> {user.department}</div>
+
+              <button
+                className="btn btn-primary"
+                onClick={() => navigate(`/profileupdate/${user.Id}`)}
+              >
+                Edit Profile
+              </button>
+            </div>
+          </div>
+        )}
     </div>
   );
 }
