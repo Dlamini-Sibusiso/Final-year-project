@@ -41,11 +41,10 @@ export default function Home() {
     router.push('/statusUpdate')
   };
 
-{/**Beta 
+  //Employee booking history
   const handleEmpHistory = () => {
-    router.push('/empBookings')
+    router.push('/empHistory')
   };
-Beta**/}
 
   const handleProfile = () => {
     router.push('/profile')
@@ -81,13 +80,12 @@ Beta**/}
         </>)}
      
         {/*Employee options*/}
-     {/**    {role === "Employee" && ( <>
+         {role === "Employee" && ( <>
         <TouchableOpacity style={styles.button} onPress={handleEmpHistory}>
           <Text style={styles.buttonText}>Booking History</Text>
         </TouchableOpacity>
         </>)}
 
-        **/}
         <TouchableOpacity style={styles.button} onPress={handleProfile}>
           <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>

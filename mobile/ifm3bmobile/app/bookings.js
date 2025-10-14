@@ -15,7 +15,7 @@ export default function Bookings() {
   const fetchBookings = async () => {
     try {
       const res = await axios.get('http://10.0.2.2:5289/api/Bookings');
-      console.log("All bookings from API:", res.data);
+      //console.log("All bookings from API:", res.data);
       //selecting bookings with status pending
       const pendingBookings = res.data.filter(b => b.status === 'Pending');
       
@@ -115,6 +115,9 @@ export default function Bookings() {
         <FlatList
           data={bookings}
           keyExtractor={(booking) => booking.id}
+          ListHeaderComponent={
+            <Text style={styles.homeTitle}>Pending Bookings</Text>
+          }
           renderItem={renderBooking}
           contentContainerStyle={styles.listContent}
         />
