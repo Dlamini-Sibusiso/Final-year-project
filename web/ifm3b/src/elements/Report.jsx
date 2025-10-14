@@ -6,9 +6,28 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
+
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#00c49f"];
+
 const Report = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,6 +37,7 @@ const Report = () => {
         setData(res.data);
       } catch (err) {
         console.error("Failed to load dashboard:", err);
+        setError("Failed to fetch report data");
       } finally {
         setLoading(false);
       }
@@ -27,6 +47,7 @@ const Report = () => {
 
   if (loading) return <div>Loading...</div>;
   if (!data) return <div>No data</div>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   const events = data.upcomingBookings.map(b => ({
     id: b.id,
@@ -48,17 +69,18 @@ const Report = () => {
         <StatCard
           title="Active Rooms"
           value={data.activeRooms}
-          onClick={() => navigate("/activemainroom")}
+          onClick={() => navigate("/rooms")}
         />
         <StatCard
           title="Rooms Under Maintenance"
           value={data.maintenanceRooms}
-          onClick={() => navigate("/activemainroom")}
+          onClick={() => navigate("/rooms")}
         />
         <StatCard title="Today's Bookings" value={data.todaysBookingsCount} />
         <StatCard title="New Bookings" value={data.newBookingsCount} />
       </div>
 
+      {/*Most Used Conf Rooms*/}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr", gap: 16 }}>
         <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
           <h4>Most Used Conf Rooms</h4>
@@ -69,6 +91,22 @@ const Report = () => {
               </li>
             ))}
           </ul>
+          {/*Conference Room Usage Bar Chart*/}
+          {Array.isArray(data.mostUsedRooms) && 
+            data.mostUsedRooms.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={data.mostUsedRooms}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="roomId" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="usageCount" fill="#8884d8" name="Number of Bookings" />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <p>No room usage data available</p>
+          )}
         </div>
 
         <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
@@ -91,6 +129,7 @@ const Report = () => {
           />
         </div>
 
+        {/* Most Requested Capacities */}
         <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
           <h4>Most Requested Capacities</h4>
           <ul>
@@ -101,6 +140,33 @@ const Report = () => {
                 </li>
             ))}
           </ul>
+          {/* Requested Capacities Pie Chart */}
+          {Array.isArray(data.mostRequestedCapacities) &&
+            data.mostRequestedCapacities.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={data.mostRequestedCapacities}
+                    dataKey="count"
+                    nameKey="capacity"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ name, percent }) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%`
+                    }
+                  >
+                    {data.mostRequestedCapacities.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => [`${value} requests`, "Count"]} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <p>No capacity data available</p>
+          )}
         </div>
       </div>
     </div>

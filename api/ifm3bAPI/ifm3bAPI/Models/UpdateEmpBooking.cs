@@ -6,5 +6,6 @@
         public required string RoomId { get; set; }
         public DateTime SesionStart { get; set; }
         public DateTime SesionEnd { get; set; }
+        public int EmployeeId { get; set; }
     }
 }

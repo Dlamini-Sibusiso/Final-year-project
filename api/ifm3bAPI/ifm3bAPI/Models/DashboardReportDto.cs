@@ -11,7 +11,6 @@
         public int TodaysBookingsCount { get; init; }
         public int NewBookingsCount { get; init; }
         public IEnumerable<RoomUsageDto> MostUsedRooms { get; init; } = Array.Empty<RoomUsageDto>();
-        //public IEnumerable<(int Capacity, int Count)> MostRequestedCapacities { get; init; } = Array.Empty<(int, int)>();
         public IEnumerable<CapacityStatDto> MostRequestedCapacities { get; init; } = Array.Empty<CapacityStatDto>();
         public IEnumerable<BookingEventDto> UpcomingBookings { get; init; } = Array.Empty<BookingEventDto>();
     }

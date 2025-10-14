@@ -4,7 +4,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 
 const UpdateBooking = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, userId } = useAuth();
   const { id } = useParams(); // booking ID from route
   const navigate = useNavigate();
   const [booking, setBooking] = useState(null);
@@ -74,7 +74,7 @@ const UpdateBooking = () => {
     const start = form.sesion_Start;
     const end = form.sesion_End;
     console.log('Start time', toLocalIOString(start));
-    console.log('End time',toLocalIOString(start));
+    console.log('End time',toLocalIOString(end));
     
     try {
       const res = await axios.post("http://localhost:5289/api/Bookings/Updatesearchavailable", {
@@ -83,10 +83,12 @@ const UpdateBooking = () => {
         SesionStart: toLocalIOString(start),//new Date(start).toISOString(),
         SesionEnd: toLocalIOString(end),//new Date(end).toISOString(),
         //capacity: parseInt(form.capacity),
+        EmployeeId: userId,
         //amenities: form.amenities,
       });
       console.log('Updating validation', res.data)
-      return res.data.length > 0;
+      //return res.data.length > 0;
+      return res.data?.message === "Room is available for update.";
     } catch (err) {
       if (err.response?.data?.message) {
         setValidationError(err.response.data.message);
@@ -102,11 +104,11 @@ const UpdateBooking = () => {
     //console.log("Submitting form:", form); 
     setCapacityErr("");
 
-    /*const isValid = await validateBeforeUpdate();
+    const isValid = await validateBeforeUpdate();
     if (!isValid)
     {
         return;
-    }*/
+    }
     const start = form.sesion_Start;
     const end = form.sesion_End;
 
@@ -133,8 +135,8 @@ const UpdateBooking = () => {
   return (
     <div>
       {!isLoggedIn && (
-            <h1 className="alert alert-warning">"You are not logged in."</h1>
-        )}
+        <h1 className="alert alert-warning">"You are not logged in."</h1>
+      )}
 
         {isLoggedIn && (
           <div className="container mt-4">
@@ -178,35 +180,35 @@ const UpdateBooking = () => {
               </div>
 
             <div className="mb-3">
-            <label className="form-label">Select Amenities</label>
-            <div className="form-check">
-            {allAmenities.map((amenity, index) => (
-              <div key={index} className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id={`amenity-${index}`}
-                  value={amenity}
-                  checked={form.amenities.includes(amenity)}
-                  onChange={(e) => {
-                    const selected = form.amenities.includes(amenity)
-                      ? form.amenities.filter((a) => a !== amenity) // remove if unchecked
-                      : [...form.amenities, amenity]; // add if checked
-                    setForm((prev) => ({ ...prev, amenities: selected }));
-                  }}
-                />
-                <label className="form-check-label" htmlFor={`amenity-${index}`}>
-              {amenity}
-            </label>
-          </div>
-        ))}
-      </div>
-          </div>
-          <button type="submit" className="btn btn-success">
-            Save Changes
-          </button>
-        </form>
-      </div>
+              <label className="form-label">Select Amenities</label>
+                <div className="form-check">
+                  {allAmenities.map((amenity, index) => (
+                    <div key={index} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={`amenity-${index}`}
+                        value={amenity}
+                        checked={form.amenities.includes(amenity)}
+                        onChange={(e) => {
+                          const selected = form.amenities.includes(amenity)
+                            ? form.amenities.filter((a) => a !== amenity) // remove if unchecked
+                            : [...form.amenities, amenity]; // add if checked
+                          setForm((prev) => ({ ...prev, amenities: selected }));
+                        }}
+                      />
+                      <label className="form-check-label" htmlFor={`amenity-${index}`}>
+                        {amenity}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            <button type="submit" className="btn btn-success">
+              Save Changes
+            </button>
+            </form>
+        </div>
       )}
     </div>
   );

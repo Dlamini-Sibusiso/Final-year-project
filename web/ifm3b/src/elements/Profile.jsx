@@ -8,10 +8,11 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  /*useEffect(() => {
     fetchProfile();
-  }, []);
+  }, []);*/
 
+  useEffect(() => {
   const fetchProfile = async () => {
     try {
       const res = await axios.get(`http://localhost:5289/api/Register/${userId}`);
@@ -21,6 +22,8 @@ const Profile = () => {
       alert("Failed to load profile");
     }
   };
+  fetchProfile();
+  }, [userId]);
 
   if (!user) return <div className="text-center mt-5">Loading profile...</div>;
 
@@ -41,7 +44,7 @@ const Profile = () => {
 
               <button
                 className="btn btn-primary"
-                onClick={() => navigate(`/profileupdate/${user.Id}`)}
+                onClick={() => navigate("/profileupdate")} 
               >
                 Edit Profile
               </button>

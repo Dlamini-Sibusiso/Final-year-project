@@ -42,16 +42,24 @@ const Nav = () => {
                                                     </div>)}
                                                 </div>)}
                 
-                {(role === "Manager"|| role ==="Employee") && (
+                {(role === "Manager"|| role ==="Employee" || role ==="Clerk") && (
                 <div className="dropdown" onMouseEnter={() => toggleDropdown("history")} onMouseLeave={closeDropdown}>
-                    <span className="nav-link"><FaCalendarAlt/>Bookings</span> {/*if manager or clerk */}
+                    <span className="nav-link"><FaCalendarAlt/>Bookings</span> {/*if manager*/}
                             {dropdownOpen === "history" && ( <> {(role === "Manager") && (<div className="dropdown-content">
                                             <Link to="rooms">Rooms</Link>
                                             </div>)}
+                            
                             {/**Beta || role ==="Clerk") && (<div className="dropdown-content">
                                         <Link to="history">History</Link>
                                         <Link to="statusupdate">Status Update</Link>
                                     </div>)} Beta**/}
+
+                                        {/*else if Clerk*/}
+                                        {role ==="Clerk" && (<div className="dropdown-content">
+                                            <Link to="history">History</Link>
+                                            <Link to="statusupdate">Status Update</Link>
+                                        </div>)}
+
                                         {/*else if employee*/}
                                         {role ==="Employee" && (<div className="dropdown-content">
                                             <Link to="emphistory">History</Link>
@@ -66,7 +74,7 @@ const Nav = () => {
                     <span className="nav-link"><FaUser/>Profile</span>
                             {dropdownOpen === "profile" && (<div className="dropdown-content">
                                     <Link to="profile">View</Link>
-                                     {/**Beta<Link to="profileupdate">Update</Link>beta*/ }
+                                     <Link to="profileupdate">Update</Link>
                                 </div>)}
                             </div>    
                 <Link to="/" onClick={handleLogout}><FaSignOutAlt/>Logout</Link>

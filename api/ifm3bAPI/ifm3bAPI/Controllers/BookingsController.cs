@@ -51,8 +51,13 @@ namespace ifm3bAPI.Controllers
                 })
                 .ToList();
 
-                //filter out rooms already booked
-                var availableRooms = roomfetched
+            //check the room fetched if there are available or not to be booked
+            var roomStatusCheck = roomfetched
+                    .Where(rm => rm.Status == "Available") 
+                    .ToList();
+
+            //filter out rooms already booked
+            var availableRooms = roomStatusCheck
                     .Where(rm => 
                         !dbContext.Bookings.Any(b => b.RoomId == rm.RoomId &&
                             b.Status != "Closed" && //Available rooms not included
@@ -353,7 +358,7 @@ namespace ifm3bAPI.Controllers
         {
             try
             {
-                if (updateEmpBooking.SesionEnd <= updateEmpBooking.SesionStart)
+                if (updateEmpBooking.SesionStart >= updateEmpBooking.SesionEnd)
                 {
                     return BadRequest(new { message = "End time must be after start time." });
                 }
@@ -368,6 +373,26 @@ namespace ifm3bAPI.Controllers
                 if (room.Status != "Available")
                 {
                     return BadRequest(new { message = "Room is currently not available." });
+                }
+
+                //Check for time overlap in Bookings for the same employee
+                var employeeConflict = dbContext.Bookings.Where(b =>
+                    b.Employee_Number == updateEmpBooking.EmployeeId &&
+                    b.Id != updateEmpBooking.BookingGuidToExclude &&
+                    b.Status != "Closed" &&
+                    updateEmpBooking.SesionStart < b.Sesion_End &&
+                    updateEmpBooking.SesionEnd > b.Sesion_Start
+                ).ToList();
+
+                if (employeeConflict.Any())
+                {
+                    Console.WriteLine("Employee has conflicting booking:");
+                    foreach (var b in employeeConflict)
+                    {
+                        Console.WriteLine($"Conflicting Booking Id={b.Id}, Start={b.Sesion_Start}, End={b.Sesion_End}");
+                    }
+
+                    return Conflict(new { message = "You already have another booking at this time." });
                 }
 
                 //Check for time overlap in Bookings (excluding current booking)
@@ -417,8 +442,8 @@ namespace ifm3bAPI.Controllers
                 }
 
                 var conflictingTemps = dbContext.BookingTemps
-                    .Where(t => t.RoomId == updateEmpBooking.RoomId)
-                    .ToList();
+                   .Where(t => t.RoomId == updateEmpBooking.RoomId)
+                   .ToList();
 
                 foreach (var t in conflictingTemps)
                 {
