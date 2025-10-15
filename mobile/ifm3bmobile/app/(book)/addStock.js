@@ -66,8 +66,7 @@ export default function AddStock() {
       await axios.post(`http://10.0.2.2:5289/api/Stocks/staging/${bookingId}`, 
         {
           stockId: selectedStockId,
-          quantity: qty,
-          userId: "someUser"
+          quantity: qty
         });
 
       setSelectedQuantity('');
@@ -100,8 +99,7 @@ export default function AddStock() {
       await axios.post(`http://10.0.2.2:5289/api/Stocks/staging/${bookingId}`, 
         {
           stockId: selectedStockId,
-          quantity: qty,
-          userId: "someUser"
+          quantity: qty
         });
         
       fetchStocks();
@@ -136,7 +134,7 @@ export default function AddStock() {
   const handleCancelAll = async () => {
     try {
       await axios.delete(`http://10.0.2.2:5289/api/Stocks/cancel/${bookingId}`);
-      Alert.alert("Cancelled", "Stock selections have been rolled back.");
+      //Alert.alert("Cancelled", "Stock selections have been rolled back.");
       router.back();
     } catch (err) {
       console.error("Cancel error", err);

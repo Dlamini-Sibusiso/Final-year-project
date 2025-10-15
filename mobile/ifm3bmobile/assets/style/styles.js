@@ -192,6 +192,35 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: '#333',
     },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 6,
+    },
+    checkbox: {
+        width: 22,
+        height: 22,
+        borderWidth: 1,
+        borderColor: '#333',
+        marginRight: 10,
+        borderRadius: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    checked: {
+        width: 12,
+        height: 12,
+        backgroundColor: 'green',
+        borderRadius: 2,
+    },
+    checkboxLabel: { fontSize: 16 },
+    error: {
+        color: 'red',
+        backgroundColor: '#ffe6e6',
+        padding: 8,
+        borderRadius: 6,
+        marginBottom: 10,
+    },
 });
 
 export default styles;

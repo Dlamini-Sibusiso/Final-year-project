@@ -1,10 +1,11 @@
-import { StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Text, TextInput, View, Alert } from 'react-native'
+import { ActivityIndicator, ScrollView, TouchableOpacity, Text, TextInput, View, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../../assets/style/styles';
 import {useLocalSearchParams, useRouter } from 'expo-router';
 import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
+
 
 const UpdateBooking = () => {
     const { userId, logout } = useAuth();
@@ -131,20 +132,20 @@ const UpdateBooking = () => {
         const end = form.sesion_End;
 
         try {
-        await axios.put(`http://localhost:5289/api/Bookings/empUdateBooking/${id}`, 
-            {
-            SesionStart: toLocalIOString(start),
-            SesionEnd: toLocalIOString(end),
-            capacity: parseInt(form.capacity),
-            amenities: form.amenities, 
-        });
+            await axios.put(`http://localhost:5289/api/Bookings/empUdateBooking/${id}`, 
+                {
+                SesionStart: toLocalIOString(start),
+                SesionEnd: toLocalIOString(end),
+                capacity: parseInt(form.capacity),
+                amenities: form.amenities, 
+            });
 
-        Alert.alert('Success', 'Booking updated successfully');
-        router.back() // Redirect back
+            Alert.alert('Success', 'Booking updated successfully');
+            router.back() // Redirect back
         } catch (err) {
-        console.error("Update failed:", err);
-        //alert("Update failed");
-        setCapacityErr(err?.response?.data?.message ?? "Unknown error occurred.");
+            console.error("Update failed:", err);
+            //alert("Update failed");
+            setCapacityErr(err?.response?.data?.message ?? "Unknown error occurred.");
         }
     };
 
@@ -190,39 +191,39 @@ const UpdateBooking = () => {
                 )  : !roomCheck ? (
                     <Text style={styles.noDataText}>The room is no longer available...</Text>
                 ) : (
-                    <View style={instyles.container}>
-                        <Text style={instyles.title}>Update Booking</Text>
+                    <View>
+                        <Text style={styles.header}>Update Booking</Text>
 
                         {validationError ? (
-                            <Text style={instyles.error}>{validationError}</Text>
+                            <Text style={styles.error}>{validationError}</Text>
                         ) : null}
 
                         {capacityErr ? (
-                            <Text style={instyles.error}>{capacityErr}</Text>
+                            <Text style={styles.error}>{capacityErr}</Text>
                         ) : null}
 
                         {/* Session Start */}
-                        <Text style={instyles.label}>Session Start</Text>
+                        <Text style={styles.labelb}>Session Start</Text>
                             <TextInput
-                                style={instyles.textInput}
+                                style={styles.textInput}
                                 placeholder="YYYY-MM-DD HH:mm"
                                 value={form.sesion_Start}
                                 onChangeText={(text) => handleChange('sesion_Start', text)}
                             />
 
                         {/* Session End */}
-                        <Text style={instyles.label}>Session End</Text>
+                        <Text style={styles.labelb}>Session End</Text>
                             <TextInput
-                                style={instyles.textInput}
+                                style={styles.textInput}
                                 placeholder="YYYY-MM-DD HH:mm"
                                 value={form.sesion_End}
                                 onChangeText={(text) => handleChange('sesion_End', text)}
                             />
 
                         {/* Capacity */}
-                        <Text style={instyles.label}>Capacity</Text>
+                        <Text style={styles.labelb}>Capacity</Text>
                             <TextInput
-                                style={instyles.textInput}
+                                style={styles.textInput}
                                 keyboardType="numeric"
                                 placeholder="Enter room capacity"
                                 value={form.capacity}
@@ -230,79 +231,31 @@ const UpdateBooking = () => {
                             />
 
                         {/* Amenities */}
-                        <Text style={instyles.label}>Select Amenities</Text>
+                        <Text style={styles.labelb}>Select Amenities</Text>
                             {allAmenities.map((amenity, index) => (
                                 <TouchableOpacity
                                     key={index}
-                                    style={instyles.checkboxContainer}
+                                    style={styles.checkboxContainer}
                                     onPress={() => toggleAmenity(amenity)}
                                 >
-                                    <View style={instyles.checkbox}>
-                                        {form.amenities.includes(amenity) && <View style={instyles.checked} />}
+                                    <View style={styles.checkbox}>
+                                        {form.amenities.includes(amenity) && <View style={styles.checked} />}
                                     </View>
-                                    <Text style={instyles.checkboxLabel}>{amenity}</Text>
+                                    <Text style={styles.checkboxLabel}>{amenity}</Text>
                                 </TouchableOpacity>
                             ))}
 
                         {/* Submit Button */}
-                        <TouchableOpacity style={instyles.button} onPress={handleSubmit}>
-                            <Text style={instyles.buttonText}>Save Changes</Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonRow}>
+                            <TouchableOpacity style={styles.actionButton} onPress={handleSubmit}>
+                                <Text style={styles.buttonText}>Save Changes</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 )}
             </ScrollView>
         </SafeAreaView>
     )
 }
-const instyles = StyleSheet.create({
-  
-    container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, color: '#333' },
-  label: { fontSize: 16, marginBottom: 5, marginTop: 15, color: '#444' },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: '#f9f9f9',
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 6,
-  },
-  checkbox: {
-    width: 22,
-    height: 22,
-    borderWidth: 1,
-    borderColor: '#333',
-    marginRight: 10,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checked: {
-    width: 12,
-    height: 12,
-    backgroundColor: 'green',
-    borderRadius: 2,
-  },
-  checkboxLabel: { fontSize: 16 },
-  button: {
-    backgroundColor: 'green',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 25,
-    alignItems: 'center',
-  },
-  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-  error: {
-    color: 'red',
-    backgroundColor: '#ffe6e6',
-    padding: 8,
-    borderRadius: 6,
-    marginBottom: 10,
-  },
-});
 
 export default UpdateBooking

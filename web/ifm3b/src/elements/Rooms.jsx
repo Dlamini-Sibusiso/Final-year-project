@@ -23,8 +23,7 @@ const Rooms = () => {
         fetchRooms();
     },[]);
 
-    const handleAdd = (e) => {
-        e.preventDefault();
+    const handleAdd = () => {
         navigate('/addRoom')
     }
 

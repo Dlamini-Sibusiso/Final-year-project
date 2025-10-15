@@ -115,9 +115,6 @@ export default function Bookings() {
         <FlatList
           data={bookings}
           keyExtractor={(booking) => booking.id}
-          ListHeaderComponent={
-            <Text style={styles.homeTitle}>Pending Bookings</Text>
-          }
           renderItem={renderBooking}
           contentContainerStyle={styles.listContent}
         />

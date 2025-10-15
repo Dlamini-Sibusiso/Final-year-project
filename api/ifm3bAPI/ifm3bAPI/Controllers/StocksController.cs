@@ -109,14 +109,14 @@ namespace ifm3bAPI.Controllers
             }
 
             //check available stock number
-            int available = stock.StockAvailable;
-            if (Dto.Quantity > available)
+            int availableStk = stock.StockAvailable;
+            if (Dto.Quantity > availableStk)
             {
                 // Cannot fully satisfy
                 return BadRequest(new
                 {
                     message = "Insufficient stock",
-                    available = available,
+                    available = availableStk,
                     requested = Dto.Quantity
                 });
             }
@@ -226,7 +226,7 @@ namespace ifm3bAPI.Controllers
                     return BadRequest("No stock items selected");
                 }
 
-                //we already deducted stock when adding stock on TempStockSelected on AddToStaging. But we should double-check for safety.
+                //we already deducted stock when adding stock on TempStockSelected on AddToStaging. But we should double check for safety.
                 var fulfilledParts = new List<string>();
                 var unfulfilledParts = new List<string>();
 
@@ -235,33 +235,30 @@ namespace ifm3bAPI.Controllers
                     var stock = await dbContext.Stocks.FindAsync(st.StockId);
                     if (stock == null)
                     {
-                        // Should not happen, but treat as unfulfilled
+                        //Should not happen, but treat as unfulfilled
                         unfulfilledParts.Add($"{st.StockId}/{st.Quantity}");
                         continue;
                     }
 
-                    // If stock.StockAvailable is negative 
+                    //check If Stock Available is negative 
                     if (stock.StockAvailable < 0)
                     {
-                        // This signals concurrency issue; for safety, treat entire st as unfulfilled
+                        //Treat entire st as unfulfilled
                         unfulfilledParts.Add($"{st.StockId}/{st.Quantity}");
                     }
                     else
                     {
-                        // We assume st.Quantity was already reserved/deducted; so it's fulfilled
+                        //Assume st.Quantity was already reserved/deducted; so it's fulfilled
                         fulfilledParts.Add($"{st.StockId}/{st.Quantity}");
                     }
 
-                    // Update StockReport: if any unfulfilled amount, add to stock.StockReport
-                    // But since we do all-or-nothing for st here, unfulfilled entirely means add full request to report
+                    //check If stock report is null
                     if (stock.StockReport == null)
                     {
                         stock.StockReport = "";
                     }
 
                     // If unfulfilled, add to report
-                    // (You might decide to parse existing report etc.)
-                    // For simplicity:
                     if (unfulfilledParts.Any(u => u.StartsWith(st.StockId + "/")))
                     {
                         int qty = st.Quantity;
@@ -272,10 +269,6 @@ namespace ifm3bAPI.Controllers
                 // Update booking fields
                 booking.Stock = string.Join(',', fulfilledParts);
                 booking.NewStock = string.Join(',', unfulfilledParts);
-
-                // Optionally, update booking.Status, booking.StatusInfo
-                //booking.Status = "StockAssigned";
-                //booking.StatusInfo = "Fulfilled and unfulfilled listed";
 
                 // Remove staging items
                 dbContext.TempStockSelections.RemoveRange(stagedStock);

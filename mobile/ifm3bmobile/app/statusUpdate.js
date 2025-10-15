@@ -128,6 +128,9 @@ export default function statusUpdate() {
         <FlatList
           data={bookings}
           keyExtractor={(booking) => booking.id}
+          ListHeaderComponent={
+            <Text style={styles.homeTitle}>Status Update</Text>
+          }
           renderItem={renderBooking}
           contentContainerStyle={styles.listContent}
         />

@@ -108,10 +108,10 @@ export default function EditProfile() {
               <TextInput style={styles.textInput} value={userDetails.email} onChangeText={value => handleChange('email', value)} keyboardType="email-address" placeholder="Email" />
 
               <View style={styles.buttonRow}>
-              <TouchableOpacity style={styles.actionButton} onPress={handleUpdate}>
-                <Text style={styles.buttonText}>Submit Changes</Text>
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity style={styles.actionButton} onPress={handleUpdate}>
+                  <Text style={styles.buttonText}>Submit Changes</Text>
+                </TouchableOpacity>
+              </View>
 
             </View>
         )}
