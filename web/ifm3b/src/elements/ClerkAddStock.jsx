@@ -13,6 +13,8 @@ const ClerkAddStock = () => {
     const [selectedStockId, setSelectedStockId] = useState('');
     const [selectedQuantity, setSelectedQuantity] = useState('');
 
+    const [statMasg, setStatMsg] = useState('');
+
     useEffect(() => {
         if (!id) 
         {
@@ -35,6 +37,7 @@ const ClerkAddStock = () => {
     const fetchStaging = async () => {
         try {
             const res = await axios.get(`http://localhost:5289/api/Stocks/tempStock/${id}`);
+            console.log("Fetched staging:", res.data); 
             setStaging(res.data);
         } catch (err) {
             if (err.response?.status === 404) 
@@ -46,17 +49,19 @@ const ClerkAddStock = () => {
         }
     };
 
-    const handleAdd = async () => {
+  const handleAdd = async () => {
+    setStatMsg('');
+
     if (!selectedStockId || !selectedQuantity) 
     {
-      //Alert.alert("Select stock and quantity");
+      setStatMsg("Select stock and quantity first");
       return;
     }
 
     const qty = parseInt(selectedQuantity);
     if (isNaN(qty) || qty <= 0) 
     {
-      //Alert.alert("Quantity must be a positive number");
+      setStatMsg("Quantity must be a positive number");
       return;
     }
 
@@ -68,6 +73,7 @@ const ClerkAddStock = () => {
         });
 
       setSelectedQuantity('');
+      setSelectedStockId('');
       fetchStocks();
       fetchStaging();
     } catch (err) {
@@ -75,24 +81,15 @@ const ClerkAddStock = () => {
       if (data?.available !== undefined) 
       {
         const { available, requested } = data;
-        alert("Insufficient stock", `Only ${available} out of ${requested} available`,
-        [{ text: `Add ${available}`, onPress: () => handleAddPartial(available) },
-          { text: `Add unfulfilled (${requested - available}) to NewStock`,
-            onPress: () => {  if (available > 0)
-                              {
-                                handleAddPartial(available); 
-                              }}
-          },
-          { text: "Cancel", style: "cancel" }
-        ]);
+        alert(`Insufficient stock. Only ${available} out of ${requested} available.`);
       } else {
         console.error("Error adding", err);
-        //Alert.alert("Error adding stock", err.toString());
+        setStatMsg("Error adding stock");
       }
     }
   };
 
-  const handleAddPartial = async (qty) => {
+ /* const handleAddPartial = async (qty) => {
     try {
       await axios.post(`http://localhost:5289/api/Stocks/staging/${id}`, 
         {
@@ -104,39 +101,45 @@ const ClerkAddStock = () => {
       fetchStaging();
     } catch (err) {
       console.error("Partial add error", err);
+      setStatMsg('Partial add error');
     }
   };
-
+*/
     const handleRemove = async (stagingId) => {
-        try {
+      setStatMsg('');
+      
+      try {
         await axios.delete(`http://localhost:5289/api/Stocks/staging/${stagingId}`);
         
         fetchStocks();
         fetchStaging();
-        } catch (err) {
+      } catch (err) {
         console.error("Error removing staging", err);
-        }
+      }
     };
 
-  const handleSubmitAll = async () => {
+  const handleSubmitAll = async (e) => {
+     e.preventDefault();
+
     try {
       await axios.post(`http://localhost:5289/api/Stocks/submit/${id}`);
-      //Alert.alert("Success", "Stocks submitted");
-      //router.back();
+      
+      navigate('/history');
     } catch (err) {
       console.error("Submit error", err);
-      //Alert.alert("Submission error", err.response?.data ?? err.toString());
+      setStatMsg('Stock not submitted');
     }
   };
 
   const handleCancelAll = async () => {
+    
     try {
       await axios.delete(`http://localhost:5289/api/Stocks/cancel/${id}`);
-      //Alert.alert("Cancelled", "Stock selections have been rolled back.");
-      //router.back();
+      
+      navigate('/history');
     } catch (err) {
       console.error("Cancel error", err);
-      //Alert.alert("Cancel failed", err.response?.data || err.message);
+      setStatMsg('Cancel error');
     }
   };
 
@@ -147,9 +150,80 @@ const ClerkAddStock = () => {
             )}
 
             {isLoggedIn && (
-                <div className="container mt-4">
-                    <h2>Clerk Add stork</h2>
+              <div className="container mt-5">
+                <div className="card shadow p-4">
+                    
+                    {statMasg && (
+                      <div className="text-danger mb-3">{statMasg}</div>
+                    )}
+
+                  <form onSubmit={handleSubmitAll}>
+                    <h2 className="mb-4">Add Stork</h2>
+                    <div className="mb-3">
+
+                      <label className="form-label">Select Stock:</label>
+                      <select
+                        className="form-control rounded-0 mb-3"
+                        value={selectedStockId}
+                        onChange={(e) => setSelectedStockId(e.target.value)}
+                        >
+                        <option value="">-- Select Stock --</option>
+                        {stocks.map((stock) => (
+                            <option key={stock.stockId} value={stock.stockId}>
+                              {stock.stockId} (Available: {stock.stockAvailable})
+                            </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Enter Quantity:</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={selectedQuantity} 
+                        onChange={(e) => setSelectedQuantity(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="d-flex gap-3">
+                      <button type="button" className="btn btn-success" onClick={handleAdd}>
+                        Add to Selection
+                      </button>
+                        
+                      <button type="submit" className="btn btn-primary">
+                        Submit All
+                      </button>
+
+                       <button type="button" className="btn btn-secondary" onClick={handleCancelAll}>
+                          Cancel
+                        </button>
+                    </div>
+                  </form>
+
+                  {/*Display current staging list */}
+                  {staging.length > 0 && (
+                    <div className="mt-4">
+                      <h5>Current Selection:</h5>
+                      <ul className="list-group">
+                        {staging.map((item) => (
+                          <li key={item.stagingId} className="list-group-item d-flex justify-content-between">
+                            <span>
+                              {item.stockId} — Qty: {item.quantity}
+                            </span>
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleRemove(item.stagingId)}
+                            >
+                              Remove
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
+            </div>
             )}
         </div>
     )

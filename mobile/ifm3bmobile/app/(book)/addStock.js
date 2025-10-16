@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, TextInput, FlatList, Alert, StyleSheet, TouchableOpacity, Modal, Pressable, ScrollView } from 'react-native';
+import { View, Text, Button, TextInput, FlatList, Alert, TouchableOpacity, Modal, Pressable, ScrollView } from 'react-native';
 import axios from 'axios';
+import styles from '../../assets/style/styles';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -48,6 +49,7 @@ export default function AddStock() {
     }
   };
 
+  //Adding stock and quantity to list
   const handleAdd = async () => {
     if (!selectedStockId || !selectedQuantity) 
     {
@@ -69,6 +71,7 @@ export default function AddStock() {
           quantity: qty
         });
 
+      setSelectedStockId('');
       setSelectedQuantity('');
       fetchStocks();
       fetchStaging();
@@ -87,6 +90,10 @@ export default function AddStock() {
           },
           { text: "Cancel", style: "cancel" }
         ]);
+        setSelectedStockId('');
+      setSelectedQuantity('');
+      fetchStocks();
+      fetchStaging();
       } else {
         console.error("Error adding", err);
         Alert.alert("Error adding stock", err.toString());
@@ -143,10 +150,10 @@ export default function AddStock() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Add Stock to Booking</Text>
+    <SafeAreaView style={styles.containerS}>
+      <Text style={styles.headerS}>Add Stock to Booking</Text>
       
-      <Text style={styles.label}>Select Stock:</Text>
+      <Text style={styles.labelS}>Select Stock:</Text>
       <TouchableOpacity onPress={() => setShowDropdown(true)} style={styles.dropdownButton}>
         <Text style={styles.dropdownButtonText}>
           {selectedStockId ? selectedStockId : 'Select Stock'}
@@ -172,13 +179,13 @@ export default function AddStock() {
         </View>
       </Modal>
 
-      <TextInput placeholder="Enter quantity" keyboardType="numeric" value={selectedQuantity} onChangeText={setSelectedQuantity} style={styles.input}/>
+      <TextInput placeholder="Enter quantity" keyboardType="numeric" value={selectedQuantity} onChangeText={setSelectedQuantity} style={styles.inputS}/>
 
       <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
-        <Text style={styles.buttonText}>Add to Selection</Text>
+        <Text style={styles.buttonTextS}>Add to Selection</Text>
       </TouchableOpacity>
 
-     {/**Beta  <Text style={styles.subHeader}>Current Selections:</Text> Beta**/}
+      <Text style={styles.subHeader}>Current Selections:</Text>
       <FlatList
         data={staging}
         keyExtractor={(item) => item.stagingId.toString() ?? `${item.stockId}-${item.quantity}`}
@@ -205,50 +212,3 @@ export default function AddStock() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f7f9fc' },
-  header: { fontSize: 22, fontWeight: 'bold', marginBottom: 20 },
-  label: { fontSize: 16, marginBottom: 5 },
-  input: {
-    borderWidth: 1, borderColor: '#ccc', padding: 10,
-    fontSize: 16, borderRadius: 6, backgroundColor: '#fff', marginVertical: 10
-  },
-  dropdownButton: {
-    borderWidth: 1, borderColor: '#ccc', padding: 12,
-    borderRadius: 6, backgroundColor: '#fff', marginBottom: 10
-  },
-  dropdownButtonText: { fontSize: 16, color: '#333' },
-  modalOverlay: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center'
-  },
-  dropdownModal: {
-    backgroundColor: '#fff', margin: 20, padding: 20, borderRadius: 8, maxHeight: 400
-  },
-  dropdownOption: {
-    padding: 12, borderBottomWidth: 1, borderBottomColor: '#eee'
-  },
-  addButton: {
-    backgroundColor: '#007BFF', padding: 14,
-    borderRadius: 6, alignItems: 'center', marginTop: 10
-  },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
-  subHeader: { fontSize: 18, fontWeight: 'bold', marginVertical: 10 },
-  stagingItem: {
-    flexDirection: 'row', justifyContent: 'space-between',
-    paddingVertical: 10, borderBottomColor: '#ccc', borderBottomWidth: 1
-  },
-  emptyText: { color: '#888', marginTop: 10, textAlign: 'center' },
-  footer: {
-    flexDirection: 'row', justifyContent: 'space-between',
-    marginTop: 30
-  },
-  submitBtn: {
-    backgroundColor: 'green', padding: 14,
-    borderRadius: 6, flex: 1, marginRight: 10, alignItems: 'center'
-  },
-  cancelBtn: {
-    backgroundColor: 'red', padding: 14,
-    borderRadius: 6, flex: 1, marginLeft: 10, alignItems: 'center'
-  },
-  footerBtnText: { color: '#fff', fontSize: 16, fontWeight: 'bold' }
-});

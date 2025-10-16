@@ -221,6 +221,60 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         marginBottom: 10,
     },
+
+    containerS: { 
+        flex: 1, 
+        padding: 20, 
+        backgroundColor: '#f7f9fc' 
+    },
+    headerS: { fontSize: 22, fontWeight: 'bold', marginBottom: 20 },
+    labelS: { fontSize: 16, marginBottom: 5 },
+    inputS: {
+        borderWidth: 1, borderColor: '#ccc', padding: 10,
+        fontSize: 16, borderRadius: 6, backgroundColor: '#fff', marginVertical: 10
+    },
+    dropdownButton: {
+        borderWidth: 1, borderColor: '#ccc', padding: 12,
+        borderRadius: 6, backgroundColor: '#fff', marginBottom: 10
+    },
+    dropdownButtonText: { fontSize: 16, color: '#333' },
+    modalOverlay: {
+        flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center'
+    },
+    dropdownModal: {
+        backgroundColor: '#fff', margin: 20, padding: 20, borderRadius: 8, maxHeight: 400
+    },
+    dropdownOption: {
+        padding: 12, borderBottomWidth: 1, borderBottomColor: '#eee'
+    },
+    addButton: {
+        backgroundColor: '#007BFF', padding: 14,
+        borderRadius: 6, alignItems: 'center', marginTop: 10
+    },
+    buttonTextS: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+    subHeader: { fontSize: 18, fontWeight: 'bold', marginVertical: 10 },
+    stagingItem: {
+        flexDirection: 'row', justifyContent: 'space-between',
+        paddingVertical: 10, borderBottomColor: '#ccc', borderBottomWidth: 1
+    },
+    emptyText: { color: '#888', marginTop: 10, textAlign: 'center' },
+    footer: {
+        flexDirection: 'row', justifyContent: 'space-between',
+        marginTop: 30
+    },
+    submitBtn: {
+        backgroundColor: 'green', padding: 14,
+        borderRadius: 6, flex: 1, marginRight: 10, alignItems: 'center'
+    },
+    cancelBtn: {
+        backgroundColor: 'red', padding: 14,
+        borderRadius: 6, flex: 1, marginLeft: 10, alignItems: 'center'
+    },
+    footerBtnText: { 
+        color: '#fff', 
+        fontSize: 16, 
+        fontWeight: 'bold' 
+    }
 });
 
 export default styles;

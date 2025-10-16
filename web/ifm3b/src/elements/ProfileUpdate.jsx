@@ -83,64 +83,64 @@ fetchProfile();
         )}
 
         {isLoggedIn && (
-    <div className="container mt-5">
-      <div className="card shadow p-4">
-        <h2 className="mb-4">Edit Profile</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
+        <div className="container mt-5">
+          <div className="card shadow p-4">
+            <h2 className="mb-4">Edit Profile</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Department</label>
-            <input
-              type="text"
-              className="form-control"
-              name="Department"
-              value={formData.Department}
-              onChange={handleChange}
-              required
-            />
-          </div>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label className="form-label">Department</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="Department"
+                  value={formData.Department}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-          <div className="mb-3">
-            <label className="form-label">Phone Number</label>
-            <input
-              type="text"
-              className="form-control"
-              name="Phone_Number"
-              value={formData.Phone_Number}
-              onChange={handleChange}
-              required
-              maxLength="10"
-            />
-          </div>
+              <div className="mb-3">
+                <label className="form-label">Phone Number</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="Phone_Number"
+                  value={formData.Phone_Number}
+                  onChange={handleChange}
+                  required
+                  maxLength="10"
+                />
+              </div>
 
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input
-              type="email"
-              className="form-control"
-              name="Email"
-              value={formData.Email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+              <div className="mb-3">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="Email"
+                  value={formData.Email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-          <div className="d-flex gap-3">
-            <button type="submit" className="btn btn-success">
-              Save Changes
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => navigate("/profile")}
-            >
-              Cancel
-            </button>
+              <div className="d-flex gap-3">
+                <button type="submit" className="btn btn-success">
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => navigate("/profile")}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
         )}
     </div>
   );

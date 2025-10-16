@@ -49,14 +49,22 @@ namespace ifm3bAPI.Controllers
         [HttpGet("tempStock/{id:Guid}")]
         public async Task<IActionResult> GetTempStockById(Guid id)
         {
-            try { 
-            var stockId = await dbContext.TempStockSelections.FindAsync(id);
-            if (stockId == null)
-            {
-                return NotFound(new { message = "Stock temp name was not found" });
-            }
+            try {
+                /*var stockId = await dbContext.TempStockSelections.FindAsync(id);
+                if (stockId == null)
+                {
+                    return NotFound(new { message = "Stock staged stock was not found" });
+                }
 
-            return Ok(stockId);
+                return Ok(stockId);  */
+                var tempStocks = await dbContext.TempStockSelections.Where(t => t.BookingId == id).ToListAsync();
+
+                if (tempStocks == null || !tempStocks.Any())
+                {
+                    return NotFound(new { message = "No staged stock found for this booking." });
+                }
+
+                return Ok(tempStocks);
             }
             catch (Exception ex)
             {
