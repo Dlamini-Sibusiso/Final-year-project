@@ -67,9 +67,10 @@ export default function Bookings() {
 
     return(
       <View style={styles.bookingCard}>
-        <Text style={styles.field}>Room ID: {booking.roomId}</Text>
-        <Text style={styles.field}>Start Time: {new Date(booking.sesion_Start).toLocaleString()}</Text>
-        <Text style={styles.field}>Status: {booking.status}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>Booking ID:</Text> {booking.id}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>Room ID:</Text> {booking.roomId}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>Start Time:</Text> {new Date(booking.sesion_Start).toLocaleString()}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>Status:</Text> {booking.status}</Text>
 
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.actionButton} onPress={() => handleViewDetails(booking)}>

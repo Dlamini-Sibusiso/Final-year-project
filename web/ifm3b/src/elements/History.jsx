@@ -38,31 +38,9 @@ const History = () => {
     navigate(`/clerkaddStock/${booking.id}`);
 };
 
-  //Status reset to available
-  const handleStatus = async (booking, newStatus) => {
-  
-    if (!newStatus || newStatus.trim() ==='') 
-    {
-      setStatMsg('Please select a status.')
-      return;
-    }
-        
-    setStatMsg('');
-    console.log('Handle Update. New status:', newStatus);
-
-    try {
-      await axios.put(`http://localhost:5289/api/Bookings/status/${booking.id}`, 
-      {
-        Status: newStatus, 
-      });
-            
-     //alert('Success', 'Status updated successfully.');
-      fetchBookings(); // Refresh booking info
-    } catch (err) {
-      console.error('Error updating status:', err);
-      //alert('Error', 'Failed to update status.');
-      setStatMsg('Failed to update status.');
-    }
+  //View booking status to update
+  const handleStatus = async (booking) => {
+    navigate(`/clerkviewstatus/${booking.id}`);
   };
 
   return (
@@ -105,7 +83,7 @@ const History = () => {
                       <td>
                         <button
                           className="btn btn-success btn-sm me-2"
-                          onClick={() => handleStatus(booking, 'Closed')}
+                          onClick={() => handleStatus(booking)}
                         >
                           View Details
                         </button>

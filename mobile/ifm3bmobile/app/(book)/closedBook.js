@@ -52,9 +52,10 @@ export default function closedBook() {
 
     return(
       <View style={styles.bookingCard}>
-        <Text style={styles.field}>Room ID: {booking.roomId}</Text>
-        <Text style={styles.field}>End Time: {new Date(booking.sesion_End).toLocaleString()}</Text>
-        <Text style={styles.field}>Status: {booking.status}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>Booking ID:</Text> {booking.id}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>Room ID:</Text> {booking.roomId}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>End Time:</Text> {new Date(booking.sesion_End).toLocaleString()}</Text>
+        <Text style={styles.field}><Text style={{fontWeight:'bold',}}>Status:</Text> {booking.status}</Text>
         
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.actionButton} onPress={() => handleViewDetails(booking)}>

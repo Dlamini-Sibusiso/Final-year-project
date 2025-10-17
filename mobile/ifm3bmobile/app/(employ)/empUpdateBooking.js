@@ -93,22 +93,26 @@ const UpdateBooking = () => {
         }
 
         console.log("BookingGuidToExclude being sent:", id);
+        console.log('RoomId', bookingInfo.roomId);
         const start = form.sesion_Start;
         const end = form.sesion_End;
         console.log('Start time', toLocalIOString(start));
         console.log('End time',toLocalIOString(end));
-        
+        console.log('Employee Id', userId);
+        console.log('Start time', typeof toLocalIOString(start), toLocalIOString(start));
+
         try {
-            const res = await axios.post("http://localhost:5289/api/Bookings/Updatesearchavailable", {
+            const res = await axios.post("http://10.0.2.2:5289/api/Bookings/Updatesearchavailable", {
                 BookingGuidToExclude: id,
-                RoomId: booking.roomId,
+                RoomId: bookingInfo.roomId,
                 SesionStart: toLocalIOString(start),
                 SesionEnd: toLocalIOString(end),
-                EmployeeId: userId,
+                EmployeeId: parseInt(userId),
             });
             console.log('Updating validation', res.data)
             return res.data?.message === "Room is available for update.";
         } catch (err) {
+            console.error(err.response?.data || err.message);
             if (err.response?.data?.message) {
                 setValidationError(err.response.data.message);
             } else {
@@ -132,7 +136,7 @@ const UpdateBooking = () => {
         const end = form.sesion_End;
 
         try {
-            await axios.put(`http://localhost:5289/api/Bookings/empUdateBooking/${id}`, 
+            await axios.put(`http://10.0.2.2:5289/api/Bookings/empUdateBooking/${id}`, 
                 {
                 SesionStart: toLocalIOString(start),
                 SesionEnd: toLocalIOString(end),
@@ -143,8 +147,7 @@ const UpdateBooking = () => {
             Alert.alert('Success', 'Booking updated successfully');
             router.back() // Redirect back
         } catch (err) {
-            console.error("Update failed:", err);
-            //alert("Update failed");
+            //console.error("Update failed:");
             setCapacityErr(err?.response?.data?.message ?? "Unknown error occurred.");
         }
     };
@@ -208,7 +211,8 @@ const UpdateBooking = () => {
                                 style={styles.textInput}
                                 placeholder="YYYY-MM-DD HH:mm"
                                 value={form.sesion_Start}
-                                onChangeText={(text) => handleChange('sesion_Start', text)}
+                                //onChangeText={(text) => handleChange('sesion_Start', text)}
+                                editable={false}
                             />
 
                         {/* Session End */}
@@ -217,7 +221,8 @@ const UpdateBooking = () => {
                                 style={styles.textInput}
                                 placeholder="YYYY-MM-DD HH:mm"
                                 value={form.sesion_End}
-                                onChangeText={(text) => handleChange('sesion_End', text)}
+                                //onChangeText={(text) => handleChange('sesion_End', text)}
+                                editable={false}
                             />
 
                         {/* Capacity */}

@@ -140,7 +140,10 @@ const UpdateBooking = () => {
 
         {isLoggedIn && (
           <div className="container mt-4">
+            
             <h2>Update Booking</h2>
+            <button className="btn btn-primary mb-3" onClick={() => navigate("/upcomingbookings")}>Back To Upcoming Bookings</button>
+
             {validationError && <div className="alert alert-danger">{validationError}</div>}
             {capacityErr && <div className="alert alert-danger">{capacityErr}</div>}
             <form onSubmit={handleSubmit}>
